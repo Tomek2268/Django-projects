@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center"><div class="card">
+    <a href="{% url 'to_do_list' current_page %}"><i class="fa-solid fa-arrow-left fa-xl" style='position:absolute;top:2rem;right:2rem;color:black;'></i></a>
+    {% if page == 'create_task' %}
+    <h3>Create task</h3>
+    {% else %}
+    <br>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="mb-3">
+            {% if field.name == 'done' %}
+                {% if page == 'task' %}
+                    {{field}}
+                    {{field.label}}
+                {% endif %}
+            {% else %}
+                {{field.label}}
+                {{field}}
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% if page == create_task %}
+        <input class="btn btn-primary" type="submit" value="Create">
+        {% else %}
+        <input class="btn btn-primary" type="submit" value="Confirm">
+        {% endif %}
+    </form>
+</div></div>
+{% endblock content %}

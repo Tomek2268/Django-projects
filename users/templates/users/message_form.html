@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+<div class="card">
+    <h3>Create message</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            {% if field.name == 'recipient' %}
+                {% if has_recipient == 'True' %}
+                {% else %}
+                    <div class="input_group mb-3">
+                        {{field.label}}
+                        {{field}}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="input_group mb-3">
+                    {{field.label}}
+                    {{field}}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <input class="btn btn-primary" type="submit" value="Send">
+    </form>
+</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <div class="card">
+        <div class="card_head mb-3">
+            <h1>Tasks</h1>
+            <form action="{% url 'to_do_list' 1 %}" method="get" name='myForm'>
+                <div style='display:flex;position:relative;'>
+                    <input class="form-control me-2" type="search" name='search' value='{{search_query}}' placeholder="Search" aria-label="Search" style='width:50%;' id='search_query'>
+                    <button class="btn btn-outline-primary" type="submit" style='position:absolute;left:55%;'><i class="fa-solid fa-magnifying-glass"></i> Search</button> 
+                </div>               
+            </form>
+            <div class="add_task">
+                <a class='btn btn-outline-success' href={% url 'create_task' %}><i class="fa-solid fa-plus fa-beat"></i> Add task</a>
+            </div>
+        </div>
+        {% if tasks %}
+            {% for task in tasks %}
+            <hr>
+                {% if task.done %}
+                <div class="task">
+                    <i><s><a class='task_title task_done' href="{% url 'task' task.id %}?page={{current_page}}"><p>{{task.title}}</p></a></s></i>
+                    <i><p>{{task.body|slice:'20'}}</p></i>
+                    <a class='task_delete' href="{% url 'delete_task' task.id %}"><i class="fa-solid fa-trash"></i></a>
+                </div>
+                {% else %}
+                <div class="task">
+                    <a class='task_title' href="{% url 'task' task.id %}?page={{current_page}}"><p>{{task.title}}</p></a>
+                    <p>{{task.body|slice:'20'}}</p>
+                    <a class='task_delete' href="{% url 'delete_task' task.id %}"><i class="fa-solid fa-trash"></i></a>
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% if paginator.num_pages > 1 %}
+            <hr>
+            <nav aria-label="..." class='mt-3'>
+                <ul class="pagination">
+                    {% for page in paginator.page_range %}
+                    {% if page == current_page %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{page}}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{% url 'to_do_list' page %}?search={{search_query}}">{{page}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+              </nav>
+            {% endif %}
+        {% else %}
+        <h6 class='mt-3' style='color:tomato;'>You have no tasks</h6>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}

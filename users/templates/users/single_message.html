@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <div class="card">
+        <h3>{{message.title}}</h3>
+        <a href="{% url 'inbox' page %}"><i class="fa-solid fa-arrow-left fa-xl" style='position:absolute;top:2rem;right:2rem;color:black;'></i></a>
+        <p>from: {{message.sender}}</p>
+        <hr>
+        {% if message.body %}
+        <p class='mb-3'>{{message.body|linebreaksbr}}</p>
+        <hr>
+        {% endif %}
+        <a href={% url 'message_form' message.sender.id True %}><button class='btn btn-outline-primary'>Reply</button></a>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <div class="card">
+        <div class="card_head">
+            <h1>Messages</h1>
+            <form action="{% url 'inbox' current_page %}" method="get" name='theForm'>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="checked" value='on' id="show_unread" {{checkbox_value}}>
+                    <label class="form-check-label" for="show_unread">
+                      Only unread messages
+                    </label>
+                </div>
+            </form>
+            <a class='add_task btn btn-outline-primary' role='button' href="{% url 'message_form' current_page False %}">Write message <i class="fa-solid fa-pen-to-square"></i></a>
+        </div>
+        {% for message in user_messages %}
+        <hr>
+        {% if message.is_read == False %}
+        <div class="task">
+            <a class='task_title' href="{% url 'single_message' message.id %}?page={{current_page}}"><p>{{message.title}}</p></a>
+            <p>{{message.sender}}</p>
+            <p>{{message.created}}</p>
+            <a class='task_delete' href="{% url 'delete_message' message.id %}?fast_delete=True&page={{current_page}}"><i class="fa-solid fa-trash"></i></a>
+        </div>
+        {% else %}
+        <div class="task" style='color:	#A9A9A9;'>
+            <a class='task_title' href="{% url 'single_message' message.id %}?page={{current_page}}"><p>{{message.title}}</p></a>
+            <p>{{message.sender}}</p>
+            <p>{{message.created}}</p>
+            <a class='task_delete' href="{% url 'delete_message' message.id %}?fast_delete=True&page={{current_page}}"><i class="fa-solid fa-trash"></i></a>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% if user_messages %}
+        {% else %}
+        <p class='mt-3' style='color:tomato;'>You have no messages</p>
+        {% endif %}
+        {% if paginator.num_pages > 1 %}
+        <hr>
+        <nav aria-label="..." class='mt-3'>
+                <ul class="pagination">
+                    {% for page in paginator.page_range %}
+                    {% if page == current_page %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{page}}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{% url 'inbox' page %}{% if checkbox_value == 'checked' %}?checked=on{% endif %}">{{page}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+<script>
+
+    let show_unread = document.getElementById('show_unread')
+    show_unread.addEventListener('click', (e) => {
+        document.theForm.submit()
+    })
+
+</script>
+{% endblock content %}

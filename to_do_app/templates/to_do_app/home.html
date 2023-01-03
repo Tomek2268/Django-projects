@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="center">
+    <h1><i class="fa-duotone fa-solid fa-h fa-5x" id='h'></i> 
+        <i class="fa-duotone fa-solid fa-o fa-5x" id='o'></i> 
+        <i class="fa-duotone fa-solid fa-m fa-5x" id='m'></i> 
+        <i class="fa-duotone fa-solid fa-e fa-5x" id='e'></i></h1>
+</div>
+
+<script>
+    let you_spin_me = new Audio("{% static 'sounds/you_spin_me.mp3' %}")
+    let audio1 = new Audio("{% static 'sounds/boing_sounds-35923.mp3' %}")
+    let audio2 = new Audio("{% static 'sounds/boing_sounds-35923.mp3' %}")
+    let audio3 = new Audio("{% static 'sounds/boing_sounds-35923.mp3' %}")
+    let audio4 = new Audio("{% static 'sounds/boing_sounds-35923.mp3' %}")
+
+    let H = document.getElementById('h')
+    let O = document.getElementById('o')
+    let M = document.getElementById('m')
+    let E = document.getElementById('e')
+    H.addEventListener('mouseover',(e)=>{
+        e.target.classList.add('fa-bounce')
+        audio1.play(
+            setTimeout(() => {
+            audio1.pause()
+            audio1.currentTime = 0
+          }, 700)
+        )
+        setTimeout(() => {
+            e.target.classList.remove('fa-bounce')
+          }, 600);
+    })
+    O.addEventListener('mouseover',(e)=>{
+        e.target.classList.add('fa-bounce')
+        audio2.play(
+            setTimeout(() => {
+            audio2.pause()
+            audio2.currentTime = 0
+          }, 700)
+        )
+        setTimeout(() => {
+            e.target.classList.remove('fa-bounce')
+          }, 600);
+    })
+    M.addEventListener('mouseover',(e)=>{
+        e.target.classList.add('fa-bounce')
+        audio3.play(
+            setTimeout(() => {
+            audio3.pause()
+            audio3.currentTime = 0
+          }, 700)
+        )
+        setTimeout(() => {
+            e.target.classList.remove('fa-bounce')
+          }, 600);
+    })
+    E.addEventListener('mouseover',(e)=>{
+        e.target.classList.add('fa-bounce')
+        audio4.play(
+            setTimeout(() => {
+            audio4.pause()
+            audio4.currentTime = 0
+          }, 700)
+        )
+        setTimeout(() => {
+            e.target.classList.remove('fa-bounce')
+          }, 600);
+    })
+    document.addEventListener('keypress', (e)=> {
+        you_spin_me.play()
+        H.classList.add('fa-spin')
+        O.classList.add('fa-flip')
+        M.classList.add('fa-spin')
+        E.classList.add('fa-spin')
+        setTimeout(() => {
+            you_spin_me.pause()
+            you_spin_me.currentTime = 0
+            H.classList.remove('fa-spin')
+            O.classList.remove('fa-flip')
+            M.classList.remove('fa-spin')
+            E.classList.remove('fa-spin')
+          }, 4000);
+      });
+</script>
+{% endblock content %}
