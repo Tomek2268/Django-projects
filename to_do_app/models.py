@@ -14,5 +14,5 @@ class Task(models.Model):
                             primary_key=True,editable=False)
 
     class Meta:
-        ordering = ['done','-created']
+        ordering = ['-created']
 

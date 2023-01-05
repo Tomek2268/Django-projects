@@ -17,18 +17,32 @@
         {% for message in user_messages %}
         <hr>
         {% if message.is_read == False %}
-        <div class="task">
+        <div class="message">
             <a class='task_title' href="{% url 'single_message' message.id %}?page={{current_page}}"><p>{{message.title}}</p></a>
             <p>{{message.sender}}</p>
             <p>{{message.created}}</p>
-            <a class='task_delete' href="{% url 'delete_message' message.id %}?fast_delete=True&page={{current_page}}"><i class="fa-solid fa-trash"></i></a>
+            <form action="" method="get">
+                <input type="hidden" name="delete" value='True'>
+                <input type="hidden" name="message_id" value={{message.id}}>
+                {% if checkbox_value == 'checked' %}
+                <input type="hidden" name="checked" value='on'>
+                {% endif %}
+                <a class='task_delete' href="{% url 'delete_message' message.id %}?fast_delete=True&page={{current_page}}"><i class="fa-solid fa-trash"></i></a>
+            </form>
         </div>
         {% else %}
-        <div class="task" style='color:	#A9A9A9;'>
+        <div class="message" style='color:	#A9A9A9;'>
             <a class='task_title' href="{% url 'single_message' message.id %}?page={{current_page}}"><p>{{message.title}}</p></a>
             <p>{{message.sender}}</p>
             <p>{{message.created}}</p>
-            <a class='task_delete' href="{% url 'delete_message' message.id %}?fast_delete=True&page={{current_page}}"><i class="fa-solid fa-trash"></i></a>
+            <form action="" method="get">
+                <input type="hidden" name="delete" value='True'>
+                <input type="hidden" name="message_id" value={{message.id}}>
+                {% if checkbox_value == 'checked' %}
+                <input type="hidden" name="checked" value='on'>
+                {% endif %}
+                <a class='task_delete' href="{% url 'delete_message' message.id %}?fast_delete=True&page={{current_page}}"><i class="fa-solid fa-trash"></i></a>
+            </form>
         </div>
         {% endif %}
         {% endfor %}
@@ -61,5 +75,12 @@
         document.theForm.submit()
     })
 
+    let task_deletes = document.getElementsByClassName('task_delete')
+    for (let i=0;i<task_deletes.length;i++){
+        task_deletes[i].addEventListener('click',(e)=>{
+            e.preventDefault()
+            task_deletes[i].parentNode.submit()
+        })
+    }
 </script>
 {% endblock content %}

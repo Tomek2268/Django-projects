@@ -21,8 +21,5 @@ class Profile(models.Model):
 
     @property
     def unread_messages(self):
-        unread = 0
-        for message in Message.objects.all():
-            if message.recipient == self.user and message.is_read == False:
-                unread += 1
+        unread = Message.objects.filter(recipient=self.user,is_read=False).count()
         return unread

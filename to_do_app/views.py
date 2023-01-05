@@ -15,11 +15,22 @@ def to_do_list(request,page):
     search_query = ''
     tasks = Task.objects.filter(owner=request.user)
     if request.GET:
-        search_query = request.GET['search']
-        tasks = tasks.filter(
-            Q(title__icontains=search_query)|
-            Q(body__icontains=search_query)
-        )
+        try:
+            search_query = request.GET['search']
+            tasks = tasks.filter(
+                Q(title__icontains=search_query)|
+                Q(body__icontains=search_query)
+            )
+        except:
+            task_id = request.GET['task']
+            task = Task.objects.get(id=task_id)
+            if task.done:
+                task.done = False
+                task.save()
+            else:
+                task.done = True
+                task.save()
+
     paginator = Paginator(tasks,5)
     tasks = paginator.page(page)
     context = {'tasks':tasks,
