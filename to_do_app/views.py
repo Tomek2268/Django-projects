@@ -21,6 +21,17 @@ def to_do_list(request,page):
                 Q(title__icontains=search_query)|
                 Q(body__icontains=search_query)
             )
+            try:
+                task_id = request.GET['task']
+                task = Task.objects.get(id=task_id)
+                if task.done:
+                    task.done = False
+                    task.save()
+                else:
+                    task.done = True
+                    task.save()
+            except:
+                pass
         except:
             task_id = request.GET['task']
             task = Task.objects.get(id=task_id)

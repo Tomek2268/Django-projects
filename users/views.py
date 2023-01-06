@@ -12,6 +12,8 @@ from .models import Message
 # Create your views here.
 
 def login_view(request):
+    errors = {}
+    username_value = ''
     try:
         if request.GET['next'] and request.method != 'POST':
             messages.warning(request,'Log in to see this page!')
@@ -29,11 +31,12 @@ def login_view(request):
             messages.success(request,'You are logged in!')
             return redirect(request.GET['next'] if request.GET else 'home')
         elif username in all_usernames:
-            messages.error(request,'Password incorrect!')
+            errors['password_error'] = 'Password incorrect!'
+            username_value = username
         else:
-            messages.error(request,'Username incorrect!')
+            errors['username_error'] = 'Username incorrect!'
 
-    context = {}
+    context = {'errors':errors,'username_value':username_value}
     return render(request,'users/login.html',context)
 
 def logout_view(request):
@@ -96,10 +99,8 @@ def change_password(request):
                 return redirect('account')
             else:
                 errors['new_password_field'] = 'New password did not match confirm password!'
-                #messages.warning(request,'New password did not match confirm password!')
         else:
             errors['current_password_field'] = 'Current password is wrong!'
-            #messages.warning(request,'Current password is wrong!')
 
     context = {'errors':errors}
     print(errors)

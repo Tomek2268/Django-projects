@@ -7,13 +7,19 @@
         {% csrf_token %}
 
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" placeholder="user123" name='username' required>
+            <input type="text" class="form-control" id="floatingInput" placeholder="user123" name='username' value='{{username_value}}' required>
             <label for="floatingInput">Username</label>
+            {% if errors.username_error %}
+                <p style='color:red;font-size:.9rem;'>{{errors.username_error}}</p>
+            {% endif %}
         </div>
 
         <div class="form-floating mb-3">
             <input type="password" class="form-control" id="floatingPassword" placeholder="*****" name='password' required>
             <label for="floatingPassword">Password</label>
+            {% if errors.password_error %}
+                <p style='color:red;font-size:.9rem;'>{{errors.password_error}}</p>
+            {% endif %}
         </div>
 
             <input class="btn btn-primary mb-5" type="submit" value="Login">

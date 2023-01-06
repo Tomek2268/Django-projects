@@ -21,6 +21,9 @@
                 <div class="task">
                     <form action="" method="GET" name='taskDoneForm'>
                         <input type="hidden" name='task' value={{task.id}}>
+                        {% if search_query != '' %}
+                        <input type="hidden" name="search" value={{search_query}}>
+                        {% endif %}
                         <input class="form-check-input checkbox" type="checkbox" checked>
                     </form>
                     <i><s><a class='task_title task_done' href="{% url 'task' task.id %}?page={{current_page}}"><p>{{task.title}}</p></a></s></i>
@@ -31,6 +34,9 @@
                 <div class="task">
                     <form action="" method="GET">
                         <input type="hidden" name='task' value={{task.id}}>
+                        {% if search_query != '' %}
+                        <input type="hidden" name="search" value={{search_query}}>
+                        {% endif %}
                         <input class="form-check-input checkbox" type="checkbox">
                     </form>
                     <a class='task_title' href="{% url 'task' task.id %}?page={{current_page}}"><p>{{task.title}}</p></a>
@@ -65,6 +71,7 @@
     for(let i = 0;i<tasks_checkboxes.length;i++) {
         tasks_checkboxes[i].addEventListener('click',(e)=>{
             tasks_checkboxes[i].parentNode.submit()
+            
         })
     }
 </script>
