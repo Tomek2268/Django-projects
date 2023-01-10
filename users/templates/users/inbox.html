@@ -6,7 +6,7 @@
             <h1>Messages</h1>
             <form action="{% url 'inbox' current_page %}" method="get" name='theForm'>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="checked" value='on' id="show_unread" {{checkbox_value}}>
+                    <input class="form-check-input" type="checkbox" name="checked" value='on' id="show_unread" {{checkbox_value}} data-checked={{checkbox_value}}>
                     <label class="form-check-label" for="show_unread">
                       Only unread messages
                     </label>
@@ -69,9 +69,26 @@
     </div>
 </div>
 <script>
+    function checked() {
+        if (document.getElementById('show_unread').dataset.checked == 'checked') {
+            localStorage.removeItem('show_unread')
+        } else {
+            localStorage.show_unread='checked'
+        }
+    }
+
+    function initial_check() {
+        if (localStorage.show_unread && document.getElementById('show_unread').dataset.checked == '') {
+            document.getElementById('show_unread').click()
+            document.theForm.submit()
+        }
+    }
+
+    initial_check()
 
     let show_unread = document.getElementById('show_unread')
     show_unread.addEventListener('click', (e) => {
+        checked()
         document.theForm.submit()
     })
 
@@ -82,5 +99,6 @@
             task_deletes[i].parentNode.submit()
         })
     }
+
 </script>
 {% endblock content %}
