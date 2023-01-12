@@ -2,9 +2,15 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from pathlib import Path
+
+import requests
+import bs4
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 from .models import Task
 from .forms import TaskForm
+from .utils import wordle_solver_program
 
 # Create your views here.
 def home(request):
@@ -91,3 +97,49 @@ def delete_task(request,pk):
         return redirect('to_do_list',1)
     context = {'object':task.title}
     return render(request,'delete_view.html',context)
+
+def wordle_solver(request):
+    message = ''
+    if request.POST:
+        try:
+            rejected_letters = request.POST['rejected_letters'].lower()
+        except:
+            rejected_letters = ''
+        try:
+            wrong_place_letters = request.POST['wrong_place_letters'].lower()
+        except:
+            wrong_place_letters = ''
+        try:
+            correct_letters = request.POST['correct_letters'].lower()
+        except:
+            correct_letters = ''
+        
+        five_letter_words = request.POST['word_list']
+        
+        how_many,five_letter_words,won = wordle_solver_program(five_letter_words,rejected_letters,wrong_place_letters,correct_letters)
+        
+        if won:
+            message = 'You won! Your word is: '+five_letter_words[0].upper()
+            turn = int(request.POST['turn'])
+        else:
+            turn = int(request.POST['turn']) + 1
+    else:
+        turn = 1
+        five_letter_words = []
+        #res = requests.get('http://www.mieliestronk.com/corncob_lowercase.txt')
+        #soup = bs4.BeautifulSoup(res.text,'lxml')
+        #all_words = soup.text.split('\r\n')
+        with open(BASE_DIR/'to_do_app/five_letter_words.txt') as f:
+            contents = f.read()
+            all_words = contents.strip('[]').replace("'",'').split(', ')
+        for word in all_words:
+            if len(word) == 5:
+                five_letter_words.append(word)
+        how_many = len(five_letter_words)
+
+
+    context = {'how_many':how_many,
+                'five_letter_words':five_letter_words,
+                'turn':turn,
+                'message':message}
+    return render(request,'to_do_app/wordle_solver.html',context)

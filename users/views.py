@@ -110,14 +110,15 @@ def change_password(request):
 def inbox(request,page):
     if request.GET:
         try:
+            request.GET['checked'] == 'on'
+            checkbox_value = 'checked'
             try:
                 message_id = request.GET['message_id']
                 message = Message.objects.get(id=message_id)
                 message.delete()
             except:
                 pass
-            request.GET['checked'] == 'on'
-            checkbox_value = 'checked'
+            
             user_messages = Message.objects.filter(recipient=request.user,is_read=False)
         except:
             message_id = request.GET['message_id']

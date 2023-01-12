@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <div class="card">
+        <form action="" method="post">
+            {% csrf_token %}
+            <h3>Provide letters if blank type '-'</h3>
+            <div class="mb-3">
+                <label for="" class="form-label" style='color:tomato;'>Rejected letters:</label>
+                <input type="text" class="form-control" name='rejected_letters' placeholder="Any number of letters">
+              </div>
+            <div class="mb-3">
+                <label for="" class="form-label" style='color:orange;'>Wrong placed letters:</label>
+                <input type="text" class="form-control" name='wrong_place_letters' placeholder="Max 5 letters">
+            </div>
+            <div class="mb-3">
+                <label for="" class="form-label" style='color:green;'>Correct letters:</label>
+                <input type="text" class="form-control" name='correct_letters' placeholder="Max 5 letters">
+            </div>
+            <input type="hidden" name="word_list" value='{{five_letter_words}}'>
+            <input type="hidden" name="turn" value={{turn}}>
+            {% if message == '' %}
+                <input type="submit" value="submit" class='btn btn-primary' id='submit_button'>
+            {% endif %}
+        </form>
+        <div>
+            {% if message != '' %}
+            <h3 style='color:green;'>{{message}}</h3>
+            <p>Wordle solved in {{turn}} turn{{turn|pluralize:'s'}}.</p>
+            <a href="{% url 'wordle_solver' %}" class="btn btn-outline-primary" aria-current="page">Solve another wordle</a>
+            {% else %}
+            <p>Turn: {{turn}}</p>
+            <p>Words left: {{how_many}}</p>
+            <label for="word_list">Word list:</label>
+            <textarea class='form-control' name="word_list" id="" cols="30" rows="10" disabled readonly>{{five_letter_words}}</textarea>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
