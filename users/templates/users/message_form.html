@@ -11,7 +11,13 @@
                 {% else %}
                     <div class="input_group mb-3">
                         {{field.label}}
-                        {{field}}
+                        
+                        <input list="users" name='custom-recipient' class='form-control' required>
+                        <datalist id="users">
+                        {% for user in users %}
+                          <option value="{{user.username}}">
+                        {% endfor %}
+                        </datalist>
                     </div>
                 {% endif %}
             {% else %}

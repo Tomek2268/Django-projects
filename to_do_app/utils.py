@@ -1,3 +1,76 @@
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+def process_input(request):
+    try:
+        rejected_letters = request.POST['rejected_letters'].lower()
+    except:
+        rejected_letters = ''
+    #Wrong place letters
+
+    w1 = request.POST['wrong_place_letters1']
+    if w1 == '':
+        w1 = '-'
+
+    w2 = request.POST['wrong_place_letters2']
+    if w2 == '':
+        w2 = '-'
+
+    w3 = request.POST['wrong_place_letters3']
+    if w3 == '':
+        w3 = '-'
+
+    w4 = request.POST['wrong_place_letters4']
+    if w4 == '':
+        w4 = '-'
+
+    w5 = request.POST['wrong_place_letters5']
+    if w5 == '':
+        w5 = '-'
+
+    #correct place letters
+
+    c1 = request.POST['correct_letters1']
+    if c1 == '':
+        c1 = '-'
+
+    c2 = request.POST['correct_letters2']
+    if c2 == '':
+        c2 = '-'
+
+    c3 = request.POST['correct_letters3']
+    if c3 == '':
+        c3 = '-'
+
+    c4 = request.POST['correct_letters4']
+    if c4 == '':
+        c4 = '-'
+
+    c5 = request.POST['correct_letters5']
+    if c5 == '':
+        c5 = '-'
+
+
+    wrong_place_letters = w1+w2+w3+w4+w5
+    correct_letters = c1+c2+c3+c4+c5
+
+
+    return rejected_letters,wrong_place_letters,correct_letters
+
+
+
+def make_word_list():
+    five_letter_words = []
+    #Using file
+    with open(BASE_DIR/'to_do_app/five_letter_words.txt') as f:
+            contents = f.read()
+            all_words = contents.strip('[]').replace("'",'').split(', ')
+    for word in all_words:
+        if len(word) == 5:
+            five_letter_words.append(word)
+    return five_letter_words
+
+
 def wordle_solver_program(five_letter_words,rejected_letters,wrong_place_letters,correct_letters):
 
     #---------------ACTUAL LOGIC---------------------------

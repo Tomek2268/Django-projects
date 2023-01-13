@@ -48,5 +48,6 @@ class MessageForm(forms.ModelForm):
         for name,field in self.fields.items():
             field.widget.attrs.update({'class':'form-control'})
             if name == 'recipient':
-                field.widget.attrs.update({'required':'True'})
+                #field.widget.attrs.update({'required':'True'})
+                pass
 

@@ -4,18 +4,31 @@
     <div class="card">
         <form action="" method="post">
             {% csrf_token %}
-            <h3>Provide letters if blank type '-'</h3>
+            <h3>Provide letters</h3>
             <div class="mb-3">
                 <label for="" class="form-label" style='color:tomato;'>Rejected letters:</label>
                 <input type="text" class="form-control" name='rejected_letters' placeholder="Any number of letters">
               </div>
             <div class="mb-3">
                 <label for="" class="form-label" style='color:orange;'>Wrong placed letters:</label>
-                <input type="text" class="form-control" name='wrong_place_letters' placeholder="Max 5 letters">
+                <div style='display:grid;grid-template-columns: 50px 50px 50px 50px 50px;'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='wrong_place_letters1'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='wrong_place_letters2'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='wrong_place_letters3'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='wrong_place_letters4'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='wrong_place_letters5'>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="" class="form-label" style='color:green;'>Correct letters:</label>
-                <input type="text" class="form-control" name='correct_letters' placeholder="Max 5 letters">
+                <div style='display:grid;grid-template-columns: 50px 50px 50px 50px 50px;'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='correct_letters1'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='correct_letters2'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='correct_letters3'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='correct_letters4'>
+                    <input type="text" style='width:2.5em;' maxlength='1' class="form-control" name='correct_letters5'>
+                </div>
+
             </div>
             <input type="hidden" name="word_list" value='{{five_letter_words}}'>
             <input type="hidden" name="turn" value={{turn}}>

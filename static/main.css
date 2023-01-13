@@ -37,11 +37,11 @@ body {
 .add_task {
     position:absolute;
     right: 0px;
-    top: 1em;
+    top: .5em;
 }
 
 div.add_task a {
-    color: 	#2e8b57;
+    color: 	white;
 }
 
 .task {
@@ -77,5 +77,3 @@ div.add_task a {
 .task_done {
     color: #778899	;
 }
-
-

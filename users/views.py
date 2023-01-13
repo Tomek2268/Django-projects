@@ -145,6 +145,7 @@ def inbox(request,page):
 def message_form(request,pk,has_recipient):
     form = MessageForm
     sender = request.user
+    users = User.objects.all()
     if has_recipient == 'True':
         recipient = User.objects.get(id=pk)
 
@@ -155,11 +156,14 @@ def message_form(request,pk,has_recipient):
             message.sender = sender
             if has_recipient == 'True':
                 message.recipient = recipient
+            else:
+                recipient = User.objects.get(username=request.POST['custom-recipient'])
+                message.recipient = recipient
             message.save()
             messages.success(request,'Message sent successfully!')
             return redirect('inbox',1)
 
-    context = {'form':form,'has_recipient':has_recipient}
+    context = {'form':form,'has_recipient':has_recipient,'users':users}
     return render(request,'users/message_form.html',context)
 
 @login_required(login_url='login')
