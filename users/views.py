@@ -157,7 +157,11 @@ def message_form(request,pk,has_recipient):
             if has_recipient == 'True':
                 message.recipient = recipient
             else:
-                recipient = User.objects.get(username=request.POST['custom-recipient'])
+                try:
+                    recipient = User.objects.get(username=request.POST['custom-recipient'])
+                except:
+                    messages.error(request,'User "'+request.POST['custom-recipient']+'" does not exist!')
+                    return redirect('message_form',1,False)
                 message.recipient = recipient
             message.save()
             messages.success(request,'Message sent successfully!')

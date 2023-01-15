@@ -5,8 +5,8 @@
         <div class="card_head">
             <h1>Messages</h1>
             <form action="{% url 'inbox' current_page %}" method="get" name='theForm'>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="checked" value='on' id="show_unread" {{checkbox_value}} data-checked={{checkbox_value}}>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role='switch' name="checked" value='on' id="show_unread" {{checkbox_value}} data-checked={{checkbox_value}}>
                     <label class="form-check-label" for="show_unread">
                       Only unread messages
                     </label>
