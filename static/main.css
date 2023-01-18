@@ -77,3 +77,9 @@ div.add_task a {
 .task_done {
     color: #778899	;
 }
+
+@media screen and (max-width: 600px) {
+    .card {
+        width:400px;
+    }
+}
