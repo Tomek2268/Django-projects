@@ -61,9 +61,9 @@
     let legal_moves = {{legal_moves}}
     let library_of_board = '{{js_library}}'
     library_of_board = library_of_board.replaceAll('&#x27;','"')
-    console.log(library_of_board)
+
     library_of_board = JSON.parse(library_of_board)
-    console.log(library_of_board)
+
 
 
 
@@ -73,9 +73,9 @@
         }
 
         for (i=0;spots.length>i;i++) {
-            console.log(spots[i].dataset.spot)
+
             let spot = spots[i].dataset.spot
-            console.log(library_of_board[spot])
+
             if (library_of_board[spot]=='O') {
                 spots[i].innerHTML = '<i class="fa-solid fa-o fa-5x"></i>'
             } else if (library_of_board[spot]=='X') {
@@ -123,7 +123,7 @@
     }
 
     if ('{{outcome}}'=='O') {
-        
+
     } else if ('{{outcome}}'=='X') {
 
     } else if ('{{outcome}}'=='tie') {
