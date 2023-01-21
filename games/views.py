@@ -18,7 +18,6 @@ def tic_tac_toe(request):
             mark = 'O'
         
         legal_moves,library_of_board,outcome,win_line = win_check(spot,mark,legal_moves,library_of_board)
-        print(outcome,win_line)
         win_line_spot,win_line_orientation = win_line
         js_library = {}
         for k,v in library_of_board.items():

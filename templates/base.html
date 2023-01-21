@@ -35,11 +35,19 @@
                   {% endif %}
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'wordle_solver' %}">Wordle solver!</a>
+              <li class="nav-item" style='margin-right:.5em;'>
+                <a class="nav-link active" href="{% url 'wordle_solver' %}" style='position:relative;'>Wordle solver!
+                  <span class="position-absolute top-10 start-90 translate-middle badge rounded-pill text-bg-warning">
+                    NEW
+                  </span>
+                </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="{% url 'tic_tac_toe' %}">Tic tac toe!</a>
+                <a class="nav-link active" href="{% url 'tic_tac_toe' %}" style='position:relative;'>Tic tac toe!
+                  <span class="position-absolute top-10 start-90 translate-middle badge rounded-pill text-bg-warning">
+                    NEW
+                  </span>
+                </a>
               </li>
             </ul>
             {% if user.is_authenticated %}
