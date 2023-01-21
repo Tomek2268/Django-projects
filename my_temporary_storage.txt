@@ -1,0 +1,3 @@
+<div class="win_horizontal"></div>
+<div class="win_vertical"></div>
+<div class="win_diagonal" style='transform:rotate(135deg);'></div>

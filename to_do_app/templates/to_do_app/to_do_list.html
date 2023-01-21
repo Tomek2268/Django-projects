@@ -5,7 +5,7 @@
         <div class="card_head mb-3">
             <h1>Tasks</h1>
             <form action="{% url 'to_do_list' 1 %}" method="get" name='myForm'>
-                <div style='display:flex;position:relative;'>
+                <div style='display:flex;position:relative;margin-top:1em;'>
                     <input class="form-control me-2" type="search" name='search' value='{{search_query}}' placeholder="Search" aria-label="Search" style='width:50%;' id='search_query'>
                     <button class="btn btn-outline-primary" type="submit" style='position:absolute;left:55%;'><i class="fa-solid fa-magnifying-glass"></i> Search</button> 
                 </div>               

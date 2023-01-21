@@ -8,45 +8,45 @@ def process_input(request):
         rejected_letters = ''
     #Wrong place letters
 
-    w1 = request.POST['wrong_place_letters1']
+    w1 = request.POST['wrong_place_letters1'].lower()
     if w1 == '':
         w1 = '-'
 
-    w2 = request.POST['wrong_place_letters2']
+    w2 = request.POST['wrong_place_letters2'].lower()
     if w2 == '':
         w2 = '-'
 
-    w3 = request.POST['wrong_place_letters3']
+    w3 = request.POST['wrong_place_letters3'].lower()
     if w3 == '':
         w3 = '-'
 
-    w4 = request.POST['wrong_place_letters4']
+    w4 = request.POST['wrong_place_letters4'].lower()
     if w4 == '':
         w4 = '-'
 
-    w5 = request.POST['wrong_place_letters5']
+    w5 = request.POST['wrong_place_letters5'].lower()
     if w5 == '':
         w5 = '-'
 
     #correct place letters
 
-    c1 = request.POST['correct_letters1']
+    c1 = request.POST['correct_letters1'].lower()
     if c1 == '':
         c1 = '-'
 
-    c2 = request.POST['correct_letters2']
+    c2 = request.POST['correct_letters2'].lower()
     if c2 == '':
         c2 = '-'
 
-    c3 = request.POST['correct_letters3']
+    c3 = request.POST['correct_letters3'].lower()
     if c3 == '':
         c3 = '-'
 
-    c4 = request.POST['correct_letters4']
+    c4 = request.POST['correct_letters4'].lower()
     if c4 == '':
         c4 = '-'
 
-    c5 = request.POST['correct_letters5']
+    c5 = request.POST['correct_letters5'].lower()
     if c5 == '':
         c5 = '-'
 

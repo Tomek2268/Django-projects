@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'to_do_app.apps.ToDoAppConfig',
+    'games.apps.GamesConfig',
 ]
 
 MIDDLEWARE = [

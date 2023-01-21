@@ -37,7 +37,7 @@ body {
 .add_task {
     position:absolute;
     right: 0px;
-    top: .5em;
+    top: .25em;
 }
 
 div.add_task a {
@@ -80,6 +80,49 @@ div.add_task a {
 
 @media screen and (max-width: 600px) {
     .card {
-        width:400px;
+        width:90vw;
     }
+}
+
+.tic_tac_toe_board {
+    display:grid;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+}
+
+.tic_tac_toe_board > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spot:hover {
+    cursor: pointer;
+    background-color: lightblue;
+}
+
+div.win_diagonal {
+    position: absolute;
+    transform: rotate(45deg);
+    background: red;
+    width: 390px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+div.win_horizontal {
+    position: absolute;
+    background: red;
+    width: 300px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+div.win_vertical {
+    position: absolute;
+    transform: rotate(90deg);
+    background: red;
+    width: 300px;
+    height: 10px;
+    border-radius: 5px;
 }
