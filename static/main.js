@@ -6,3 +6,4 @@ for (i=0;toastsX.length > i; i++) {
         e.target.parentNode.parentNode.remove()
     })
 }
+

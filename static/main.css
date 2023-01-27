@@ -101,6 +101,11 @@ div.add_task a {
     background-color: lightblue;
 }
 
+.spot_other_color:hover {
+    cursor: pointer;
+    background-color: lightsalmon;
+}
+
 div.win_diagonal {
     position: absolute;
     transform: rotate(45deg);
