@@ -2,10 +2,16 @@
 {% block content %}
 <div class="center">
     <div class="card" style='justify-content:center;'>
-        <div class="card_head" style='display:flex;justify-content:center;'>
-            <h3>TIC TAC TOE</h3>
-            <a role="button" href={% url 'tic_tac_toe' %} class="btn btn-outline-secondary" style='position:absolute;top:4em;'>Refresh <i class="fa-solid fa-rotate"></i></a>
-            
+        <div class="card_head" style='display:grid;grid-template-columns: 1fr 1fr 1fr;'>
+            <div><h3>TIC TAC TOE</h3></div>
+            <div style='position: relative;'><a role="button" href={% url 'tic_tac_toe' %} class="btn btn-outline-secondary" style='position:absolute;left:25%;'>Refresh <i class="fa-solid fa-rotate"></i></a></div>
+            <div style='position: relative;'>
+                {% if request.user.profile.has_game %}
+                <a role='button' class="btn btn-success fa-fade" href="{% url 'tic_tac_toe_online' %}" style='position:absolute;left:25%;'>play online!</a>
+                {% else %}
+                <a role='button' class="btn btn-outline-success" href="{% url 'tic_tac_toe_online' %}" style='position:absolute;left:25%;'>play online!</a>
+                {% endif %}
+            </div>
         </div>
         <div class="center">
             <div class="tic_tac_toe_board">
@@ -45,6 +51,13 @@
                 </div>
 
             </div>
+            {% if outcome == 'tie' %}
+            <br>
+            <h3>It is a tie</h3>
+            {% elif outcome != 'false' %}
+            <br>
+            <h3>"{{outcome}}" has won!</h3>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -60,6 +73,7 @@
     let spots = document.getElementsByClassName('x')
     let legal_moves = {{legal_moves}}
     let library_of_board = '{{js_library}}'
+    let mark = '{{mark}}'
     library_of_board = library_of_board.replaceAll('&#x27;','"')
 
     library_of_board = JSON.parse(library_of_board)
@@ -82,19 +96,25 @@
                 spots[i].innerHTML = '<i class="fa-solid fa-xmark fa-6x"></i>'
             }
         }
- 
-        for (k=0;legal_moves.length>k;k++) {
+        if ('{{outcome}}' == 'false') {
+        
+            for (k=0;legal_moves.length>k;k++) {
 
-            for (l=0;spots.length>l;l++) {
-                let spot = spots[l].dataset.spot
+                for (l=0;spots.length>l;l++) {
+                    let spot = spots[l].dataset.spot
 
-                if (spots[l].dataset.spot == legal_moves[k]) {
-                    spots[l].classList.add('spot')
+                    if (spots[l].dataset.spot == legal_moves[k]) {
+                        if (mark == 'X') {
+                            spots[l].classList.add('spot')
+                        } else {
+                            spots[l].classList.add('spot_other_color')
+                        }
 
-                    spots[l].addEventListener('click',(e)=>{
-                        document.getElementById('spot_input').value = spot
-                        document.spot_form.submit()
-                    })
+                        spots[l].addEventListener('click',(e)=>{
+                            document.getElementById('spot_input').value = spot
+                            document.spot_form.submit()
+                        })
+                    }
                 }
             }
         }
@@ -122,12 +142,5 @@
         win_line_spot.appendChild(div)
     }
 
-    if ('{{outcome}}'=='O') {
-
-    } else if ('{{outcome}}'=='X') {
-
-    } else if ('{{outcome}}'=='tie') {
-
-    }
 </script>
 {% endblock content %}
