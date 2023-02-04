@@ -4,7 +4,8 @@
     <div class="card">
         <form action="" method="post">
             {% csrf_token %}
-            <h3>Provide letters</h3>
+            <h3>Solve wordle!</h3>
+            <a href="https://wordlegame.org" role='button' class='btn btn-outline-secondary' style='margin-bottom:1em;'>Wordle</a>
             <div class="mb-3">
                 <label for="" class="form-label" style='color:tomato;'>Rejected letters:</label>
                 <input type="text" class="form-control" name='rejected_letters' placeholder="Any number of letters">

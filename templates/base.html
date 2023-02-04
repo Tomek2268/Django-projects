@@ -29,7 +29,7 @@
               <li class="nav-item"  style='margin-right:.5em;'>
                 <a class="nav-link active" href="{% url 'inbox' 1 %}" style='position:relative;'>Inbox
                   {% if request.user.profile.unread_messages > 0 %}
-                    <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill text-bg-danger">
                       {{request.user.profile.unread_messages}}
                     </span>
                   {% endif %}
@@ -37,16 +37,16 @@
               </li>
               <li class="nav-item" style='margin-right:.5em;'>
                 <a class="nav-link active" href="{% url 'wordle_solver' %}" style='position:relative;'>Wordle solver!
-                  <span class="position-absolute top-10 start-90 translate-middle badge rounded-pill text-bg-warning">
-                    NEW
-                  </span>
+
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="{% url 'tic_tac_toe' %}" style='position:relative;'>Tic tac toe!
-                  <span class="position-absolute top-10 start-90 translate-middle badge rounded-pill text-bg-warning">
-                    NEW
+                  {% if request.user.profile.has_game %}
+                  <span class="fa-fade position-absolute top-10 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">New alerts</span>
                   </span>
+                  {% endif %}
                 </a>
               </li>
             </ul>
@@ -63,7 +63,7 @@
 
     {% if messages %}
         {% for message in messages %}
-        <div style="
+        <div id='message' style="
         {% if message.tags == 'info' %}
         background:lightblue;
         {% elif message.tags == 'warning' %}
@@ -94,5 +94,14 @@
       e.target.classList.remove('fa-flip')
     }, 1000);
   })
+  let message = document.getElementById('message')
+  if (message) {
+    setTimeout(()=>{
+      message.style.animation = 'fade_out 3s'
+      setTimeout(()=>{
+        message.remove()
+      },2500)
+    },5000)
+  }
 </script>
 </html>
