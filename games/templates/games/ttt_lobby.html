@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <div class="card">
+        <form action="" method="post">
+            {% csrf_token %}
+            <label for="">Join room</label>
+            <input type="text" name="join_room" id="" class='form-control mb-3' placeholder='Example_room'>
+
+            <label for="">Create room</label>
+            <input type="text" name="create_room" id="" class='form-control' placeholder='New_room!'>
+
+            <input type="submit" name="" id="" class='btn btn-primary mt-3' value='Submit'>
+        </form>
+    </div>
+</div>
+{% endblock content %}

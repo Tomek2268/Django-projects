@@ -7,9 +7,9 @@
             <div style='position: relative;'><a role="button" href={% url 'tic_tac_toe' %} class="btn btn-outline-secondary" style='position:absolute;left:25%;'>Refresh <i class="fa-solid fa-rotate"></i></a></div>
             <div style='position: relative;'>
                 {% if request.user.profile.has_game %}
-                <a role='button' class="btn btn-success fa-fade" href="{% url 'tic_tac_toe_online' %}" style='position:absolute;left:25%;'>play online!</a>
+                <a role='button' class="btn btn-success fa-fade" href="{% url 'ttt_lobby' %}" style='position:absolute;left:25%;'>play online!</a>
                 {% else %}
-                <a role='button' class="btn btn-outline-success" href="{% url 'tic_tac_toe_online' %}" style='position:absolute;left:25%;'>play online!</a>
+                <a role='button' class="btn btn-outline-success" href="{% url 'ttt_lobby' %}" style='position:absolute;left:25%;'>play online!</a>
                 {% endif %}
             </div>
         </div>
@@ -124,7 +124,6 @@
 
     if ({{win_line_spot}}) {
         let win_line_spot = document.querySelector('[data-spot="{{win_line_spot}}"]')
-        console.log(win_line_spot)
         var div = document.createElement("div")
         div.style.width = "300px"
         div.style.height = "10px"

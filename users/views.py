@@ -53,7 +53,7 @@ def register_view(request):
             form.save()
             user = User.objects.get(username=request.POST['username'])
             create_profile(user)
-            send_welcome_email(user)
+            #send_welcome_email(user)
             messages.success(request,'User created successfully!')
             login(request,user)
             return redirect('home')

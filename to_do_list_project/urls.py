@@ -23,6 +23,7 @@ urlpatterns = [
     path('users/',include('users.urls')),
     path('',include('to_do_app.urls')),
     path('games/',include('games.urls')),
+    path('api/',include('games.api.urls')),
     #reset pasword
     path('accounts/password_reset/',auth_views.PasswordResetView.as_view(
         template_name='reset_password.html'),name='password_reset'),

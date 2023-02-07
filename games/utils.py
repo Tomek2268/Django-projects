@@ -40,7 +40,7 @@ def win_check(spot,mark,legal_moves,library_of_board):
 
         return legal_moves,library_of_board,'X',win_line
 
-    elif len(legal_moves)==0:
+    elif len(legal_moves) == 0:
 
         return legal_moves,library_of_board,'tie',win_line
     else:

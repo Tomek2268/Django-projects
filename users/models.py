@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+import sys
+ 
+# setting path
+sys.path.append('../games')
+ 
+# importing
+from games.models import TicTacToeGame
+
 # Create your models here.
 
 
@@ -23,3 +31,11 @@ class Profile(models.Model):
     def unread_messages(self):
         unread = Message.objects.filter(recipient=self.user,is_read=False).count()
         return unread
+
+    @property
+    def has_game(self):
+        try:
+            game = TicTacToeGame.objects.get(invited=self.user)
+            return True
+        except:
+            return False
