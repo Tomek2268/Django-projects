@@ -79,13 +79,41 @@
         opponent.innerHTML = '{{game.host.username}}'
     }
 
+    let spots = document.getElementsByClassName('x')
+
     let mark = 'O'
 
     let legal_moves = [7,8,9,4,5,6,1,2,3]
 
     let library_of_board = {7:" ",8:" ",9:" ",4:" ",5:" ",6:" ",1:" ",2:" ",3:" "}
 
-    let spots = document.getElementsByClassName('x')
+    function set_default() {
+        mark = 'O'
+        legal_moves = [7,8,9,4,5,6,1,2,3]
+        library_of_board = {7:" ",8:" ",9:" ",4:" ",5:" ",6:" ",1:" ",2:" ",3:" "}
+
+        for (let i=0;spots.length>i;i++) {
+            spots[i].classList.remove('spot')
+            spots[i].classList.remove('spot_other_color')
+        }
+    }
+
+    function clear_board() {
+        let win_line_drawn = document.getElementById('win_line')
+
+        if (win_line_drawn) {
+            win_line_drawn.remove()
+        }
+
+        for (let i=0;spots.length>i;i++) {
+
+            if (spots[i].getElementsByTagName('i')[0]) {
+                spots[i].getElementsByTagName('i')[0].remove()
+            }
+        }
+    }
+
+    set_default()
 
     var user_joined = 'http://127.0.0.1:8000/api/user_joined/'
 
@@ -205,22 +233,24 @@
     }
 
     change_spot_display()
+    set_default()
 
     channel.bind('user_left', function(data) {
-        console.log(data)
         if (data.username == '{{game.host.username}}') {
             window.location = window.location.href
         } else {
             opponent.innerHTML = ''
+            set_default()
+            clear_board()
         }
     })
     channel.bind('user_joined', function(data) {
-        console.log(data)
-        opponent.innerHTML = data.username
+        if (data.username != '{{request.user.username}}') {
+            change_spot_display()
+            opponent.innerHTML = data.username
+        }
     })
     channel.bind('player_move', function(data) {
-        console.log(data)
-
         spot = document.querySelector(`[data-spot="${data.spot}"]`)
         spot.classList.remove('spot')
         spot.innerHTML += (data.mark)
@@ -285,18 +315,7 @@
 
                 change_spot_display()
 
-                win_line_drawn = document.getElementById('win_line')
-
-                if (win_line_drawn) {
-                    win_line_drawn.remove()
-                }
-
-                for (let i=0;spots.length>i;i++) {
-                    spots[i].classList.add('spot')
-                    if (spots[i].getElementsByTagName('i')[0]) {
-                        spots[i].getElementsByTagName('i')[0].remove()
-                    }
-                }
+                clear_board()
             })
 
             let win_line = document.querySelector(`[data-spot="${win_line_spot}"]`)
