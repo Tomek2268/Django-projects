@@ -2,7 +2,9 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+
 from .models import TicTacToeGame
+
 import ast
 
 from .utils import win_check
@@ -71,6 +73,7 @@ def ttt_lobby(request):
                 messages.warning(request,f'Room "{create_room}" already exist!')
             else:
                 TicTacToeGame.objects.create(room=create_room,host=request.user)
+
                 return redirect('tic_tac_toe_online',create_room)
 
 
@@ -92,4 +95,4 @@ def tic_tac_toe_online(request,room):
                 'game':game,
                 'room':room,
             }
-    return render(request,'games/t_t_t_with_channels.html',context)
+    return render(request,'games/ttt_with_pusher.html',context)
