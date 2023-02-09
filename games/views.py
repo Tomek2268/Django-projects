@@ -15,6 +15,7 @@ def tic_tac_toe(request):
 
 @login_required(login_url='login')
 def ttt_lobby(request):
+    rooms = TicTacToeGame.objects.all().values_list('room',flat=True)
 
     if request.POST:
         join_room = request.POST.get('join_room')
@@ -43,7 +44,7 @@ def ttt_lobby(request):
 
 
 
-    context = {}
+    context = {'rooms':rooms}
     return render(request,'games/ttt_lobby.html',context)
 
 @login_required(login_url='login')

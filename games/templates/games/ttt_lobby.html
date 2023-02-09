@@ -4,8 +4,14 @@
     <div class="card">
         <form action="" method="post">
             {% csrf_token %}
+
             <label for="">Join room</label>
-            <input type="text" name="join_room" id="" class='form-control mb-3' placeholder='Example_room'>
+            <input list='rooms' type="text" name="join_room" class='form-control mb-3' placeholder='Example_room'>
+            <datalist id="rooms">
+            {% for room in rooms %}
+              <option value="{{room}}">
+            {% endfor %}
+            </datalist>
 
             <label for="">Create room</label>
             <input type="text" name="create_room" id="" class='form-control' placeholder='New_room!'>
