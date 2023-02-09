@@ -31,11 +31,3 @@ class Profile(models.Model):
     def unread_messages(self):
         unread = Message.objects.filter(recipient=self.user,is_read=False).count()
         return unread
-
-    @property
-    def has_game(self):
-        try:
-            game = TicTacToeGame.objects.get(invited=self.user)
-            return True
-        except:
-            return False

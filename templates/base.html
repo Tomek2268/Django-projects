@@ -44,11 +44,6 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href="{% url 'tic_tac_toe' %}" style='position:relative;'>Tic tac toe!
-                  {% if request.user.profile.has_game %}
-                  <span class="fa-fade position-absolute top-10 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-                    <span class="visually-hidden">New alerts</span>
-                  </span>
-                  {% endif %}
                 </a>
               </li>
             </ul>

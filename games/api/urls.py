@@ -11,4 +11,5 @@ urlpatterns = [
     path('user_joined/',views.user_joined),
     path('user_left/',views.user_left),
     path('player_move/',views.player_move),
+    path('game_continue/',views.game_continue),
 ]

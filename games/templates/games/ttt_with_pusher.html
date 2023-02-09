@@ -5,12 +5,14 @@
     <div class="card" style='justify-content:center;'>
         <div class="card_head" style='display:grid;grid-template-columns: 1fr 1fr 1fr;'>
             <div>
-                <h4>Playing with:</h4>
+                <h4>You</h4>
+                <h4 id='your_points'>0</h4>
                 <h4 id='opponent'>There is no one yet...</h4>
+                <h4 id='opponen_points'>0</h4>
 
             </div>
             <div style='position: relative;' id='play_again'>
-                
+                <h2 id='outcome_display' style='color:tomato;'></h2>
             </div>
             <div style='position: relative;'>
                 {% if request.user.username == game.host.username %}
@@ -64,11 +66,13 @@
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 
 <script>
-    let close_room = document.getElementById('close_room')
-
-    let back_to_lobby = document.getElementById('back_to_lobby')
+    let outcome_display = document.getElementById('outcome_display')
 
     let play_again = document.getElementById('play_again')
+
+    let your_points = document.getElementById('your_points')
+    
+    let opponent_points = document.getElementById('opponen_points')
 
     let opponent = document.getElementById('opponent')
 
@@ -121,6 +125,8 @@
 
     var player_move = 'http://127.0.0.1:8000/api/player_move/'
 
+    var game_continue = 'http://127.0.0.1:8000/api/game_continue/'
+
     Pusher.logToConsole = true
 
     var pusher = new Pusher('dc6b22fbfe1791ca3f03', {
@@ -140,37 +146,20 @@
         }),
       })
         .then((response) => response.json())
-    
-    if (close_room) {
-        close_room.addEventListener('click',(e)=>{
-            fetch(user_left, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    'username': '{{request.user.username}}',
-                    'game': '{{game.id}}'
-                }),
-                })
-                .then((response) => response.json())
-        })
-    }
-    if (back_to_lobby) {
-        back_to_lobby.addEventListener('click',(e)=>{
-            fetch(user_left, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    'username': '{{request.user.username}}',
-                    'game': '{{game.id}}'
-                }),
-                })
-                .then((response) => response.json())
-        })
-    }
+
+    window.addEventListener("beforeunload", (e) => {
+        fetch(user_left, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                'username': '{{request.user.username}}',
+                'game': '{{game.id}}'
+            }),
+            })
+            .then((response) => response.json())
+    })
 
     function change_spot_display() {
         if (player_mark != mark) {
@@ -234,12 +223,22 @@
 
     change_spot_display()
     set_default()
-
+    channel.bind('game_continue', function(data) {
+        if (data.game_continue == 'true') {
+            change_spot_display()
+            outcome_display.innerHTML = ''
+        }
+    })
     channel.bind('user_left', function(data) {
         if (data.username == '{{game.host.username}}') {
             window.location = window.location.href
         } else {
-            opponent.innerHTML = ''
+            if (play_again.querySelector('button')) {
+                play_again.querySelector('button').remove()
+            }
+            outcome_display.innerHTML = ''
+            player_mark = 'O'
+            opponent.innerHTML = `${data.username} left`
             set_default()
             clear_board()
         }
@@ -247,7 +246,11 @@
     channel.bind('user_joined', function(data) {
         if (data.username != '{{request.user.username}}') {
             change_spot_display()
+            outcome_display.innerHTML = ''
+
             opponent.innerHTML = data.username
+            your_points.innerHTML = '0'
+            opponen_points.innerHTML = '0'
         }
     })
     channel.bind('player_move', function(data) {
@@ -278,11 +281,32 @@
             let win_line_spot = win_data[1][0]
             let win_line_orientation = win_data[1][1]
             if (win_data[0] == 'tie') {
-                //alert('It is a tie...')
+                outcome_display.style.color = '#FFA500'
+                outcome_display.innerHTML = 'It is a tie...'
             } else if (win_data[0] == 'O') {
-                //alert('{{game.host.username}} has won!!')
+                if (player_mark == 'O') {
+                    outcome_display.style.color = 'green'
+                    outcome_display.innerHTML = 'You won!!!'
+                    your_points_int = parseInt(your_points.innerHTML) + 1
+                    your_points.innerHTML = `${your_points_int}`
+                } else {
+                    outcome_display.style.color = 'tomato'
+                    outcome_display.innerHTML = 'You lost :('
+                    opponent_points_int = parseInt(opponent_points.innerHTML) + 1
+                    opponent_points.innerHTML = `${opponent_points_int}`
+                }
             } else if (win_data[0] == 'X') {
-                //alert('{{game.invited.username}} has won!!')
+                if (player_mark == 'X') {
+                    outcome_display.style.color = 'green'
+                    outcome_display.innerHTML = 'You won!!!'
+                    your_points_int = parseInt(your_points.innerHTML) + 1
+                    your_points.innerHTML = `${your_points_int}`
+                } else {
+                    outcome_display.style.color = 'tomato'
+                    outcome_display.innerHTML = 'You lost :('
+                    opponent_points_int = parseInt(opponent_points.innerHTML) + 1
+                    opponent_points.innerHTML = `${opponent_points_int}`
+                }
             }
             for (let i=0;spots.length>i;i++) {
                 spots[i].classList.remove('spot')
@@ -298,8 +322,21 @@
             button = document.getElementById('play_again_button')
 
             button.addEventListener('click',(e)=>{
+                fetch(game_continue, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'game': '{{game.id}}'
+                    }),
+                  })
+                    .then((response) => response.json())
 
                 e.target.remove()
+                
+                outcome_display.style.color = 'black'
+                outcome_display.innerHTML = 'Waiting for other player <i class="fa-solid fa-hourglass fa-spin"></i>'
 
                 mark = 'O'
 
@@ -313,7 +350,11 @@
                     player_mark = 'O'
                 }
 
-                change_spot_display()
+                //change_spot_display()
+                for (let i=0;spots.length>i;i++) {
+                    spots[i].classList.remove('spot')
+                    spots[i].classList.remove('spot_other_color')
+                }
 
                 clear_board()
             })
