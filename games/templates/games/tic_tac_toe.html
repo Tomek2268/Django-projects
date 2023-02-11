@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <div class="card" style='justify-content:center;'>
+        <div class="card_head" style='display:grid;grid-template-columns: 1fr 1fr 1fr;'>
+            <div><h3>TIC TAC TOE</h3></div>
+            <div style='position: relative;'><a role="button" href={% url 'tic_tac_toe' %} class="btn btn-outline-secondary" style='position:absolute;left:25%;'>Refresh <i class="fa-solid fa-rotate"></i></a></div>
+            <div style='position: relative;'>
+                <a role='button' class="btn btn-outline-success" href="{% url 'ttt_lobby' %}" style='position:absolute;left:25%;'>play online!</a>
+            </div>
+        </div>
+        <div class="center">
+            <div class="tic_tac_toe_board">
+
+                <div style='border-right: 2px solid black;border-bottom: 2px solid black;' class='x spot' data-spot='7'>
+
+                </div>
+                <div style='border-left: 2px solid black;border-right: 2px solid black;border-bottom: 2px solid black;' class='x spot' data-spot='8'>
+                    <div id="line8"></div>
+                </div>
+                <div style='border-left: 2px solid black;border-bottom: 2px solid black;' class='x spot' data-spot='9'>
+                    
+                </div>
+
+
+
+                <div style='border-bottom: 2px solid black;border-right: 2px solid black;border-top: 2px solid black;' class='x spot' data-spot='4'>
+                    <div id="line4" class=''> </div>
+                </div>
+                <div style='border: 2px solid black;' class='x spot' data-spot='5'>
+                    <div id="line5"></div>
+                </div>
+                <div style='border-bottom: 2px solid black;border-left: 2px solid black;border-top: 2px solid black;' class='x spot' data-spot='6'>
+                    <div id="line6"></div>
+                </div>
+
+
+
+                <div style='border-right: 2px solid black;border-top: 2px solid black;' class='x spot' data-spot='1'>
+
+                </div>
+                <div style='border-left: 2px solid black;border-right: 2px solid black;border-top: 2px solid black;' class='x spot' data-spot='2'>
+                    <div id="line2"></div>
+                </div>
+                <div style='border-left: 2px solid black;border-top: 2px solid black;' class='x spot' data-spot='3'>
+                    
+                </div>
+
+            </div>
+            <h2 id="outcome" style='color:tomato;'></h2>
+        </div>
+    </div>
+</div>
+
+<script>
+    let show_outcome = document.getElementById('outcome')
+    let spots = document.getElementsByClassName('x')
+    let legal_moves = [1,2,3,4,5,6,7,8,9]
+    let library_of_board = {7:" ",8:" ",9:" ",4:" ",5:" ",6:" ",1:" ",2:" ",3:" "}
+    let mark = 'X'
+    let outcome = false
+
+    function change_spot_display() {
+        if (mark == 'X') {
+            for (i=0;spots.length>i;i++) {
+                spots[i].classList.remove('spot_other_color')
+                if (legal_moves.includes(parseInt(spots[i].dataset.spot))) {
+                    spots[i].classList.add('spot')
+                }
+            }
+            mark = 'O'
+        } else {
+            for (i=0;spots.length>i;i++) {
+                spots[i].classList.remove('spot')
+                if (legal_moves.includes(parseInt(spots[i].dataset.spot))) {
+                    spots[i].classList.add('spot_other_color')
+                }
+            }
+            mark = 'X'
+        }
+    }
+
+    function win_check() {
+        let x = library_of_board
+
+        let lines_list = [x[7]==x[8] && x[8]==x[9] && x[9]!=' ',
+                    x[4]==x[5] && x[5]==x[6] && x[6]!=' ',
+                    x[1]==x[2] && x[2]==x[3] && x[3]!=' ',
+                    x[7]==x[4] && x[4]==x[1] && x[1]!=' ',
+                    x[8]==x[5] && x[5]==x[2] && x[2]!=' ',
+                    x[9]==x[6] && x[6]==x[3] && x[3]!=' ',
+                    x[9]==x[5] && x[5]==x[1] && x[1]!=' ',
+                    x[7]==x[5] && x[5]==x[3] && x[3]!=' '
+        ]
+
+        let win_line = [false,false]
+
+        if (lines_list[0]) {
+            win_line = [8,'horizontal']
+        } else if (lines_list[1]) {
+            win_line = [5,'horizontal']
+        } else if (lines_list[2]) {
+            win_line = [2,'horizontal']
+        } else if (lines_list[3]) {
+            win_line = [4,'vertical']
+        } else if (lines_list[4]) {
+            win_line = [5,'vertical']
+        } else if (lines_list[5]) {
+            win_line = [6,'vertical']
+        } else if (lines_list[6]) {
+            win_line = [5,'diagonal_135']
+        } else if (lines_list[7]) {
+            win_line = [5,'diagonal_45']
+        }
+
+        if (x[7]==x[8]&&x[8]==x[9]&&x[9]=='O' || x[4]==x[5]&&x[5]==x[6]&&x[6]=='O' || x[1]==x[2]&&x[2]==x[3]&&x[3]=='O' || x[7]==x[4]&&x[4]==x[1]&&x[1]=='O' || x[8]==x[5]&&x[5]==x[2]&&x[2]=='O' || x[9]==x[6]&&x[6]==x[3]&&x[3]=='O' || x[9]==x[5]&&x[5]==x[1]&&x[1]=='O' || x[7]==x[5]&&x[5]==x[3]&&x[3]=='O'){
+            return ['O', win_line]
+        } else if (x[7]==x[8]&&x[8]==x[9]&&x[9]=='X' || x[4]==x[5]&&x[5]==x[6]&&x[6]=='X' || x[1]==x[2]&&x[2]==x[3]&&x[3]=='X' || x[7]==x[4]&&x[4]==x[1]&&x[1]=='X' || x[8]==x[5]&&x[5]==x[2]&&x[2]=='X' || x[9]==x[6]&&x[6]==x[3]&&x[3]=='X' || x[9]==x[5]&&x[5]==x[1]&&x[1]=='X' || x[7]==x[5]&&x[5]==x[3]&&x[3]=='X'){
+            return ['X', win_line]
+        } else if (legal_moves.length == 0) {
+            return ['tie',win_line]
+        } else {
+            return [false,win_line]
+        }
+    }
+
+    function add_listeners() {
+        for (let i=0;spots.length>i;i++) {
+            spots[i].addEventListener('click',(e) => {
+                if (spots[i].classList.value == 'x spot' || spots[i].classList.value == 'x spot_other_color') {
+                    spot = spots[i].dataset.spot
+                    board_spot = document.querySelector(`[data-spot="${spot}"]`)
+                    library_of_board[parseInt(spot)] = mark
+
+                    if (mark == 'O') {
+                        board_spot.innerHTML = '<i class="fa-solid fa-o fa-5x"></i>'
+                    } else {
+                        board_spot.innerHTML = '<i class="fa-solid fa-xmark fa-6x"></i>'
+                    }
+
+                    board_spot.classList.remove('spot')
+                    board_spot.classList.remove('spot_other_color')
+                    let index = legal_moves.indexOf(parseInt(spot))
+    
+                    legal_moves.splice(index,1)
+
+                    change_spot_display()
+
+                    outcome = win_check()[0]
+
+                    if (outcome) {
+                        let win_data = win_check()
+                        let win_line_spot = win_data[1][0]
+                        let win_line_orientation = win_data[1][1]
+
+                        for (let i=0;spots.length>i;i++) {
+                            spots[i].classList.remove('spot')
+                            spots[i].classList.remove('spot_other_color')
+                        }
+
+                        let win_line = document.querySelector(`[data-spot="${win_line_spot}"]`)
+                        var div = document.createElement("div")
+                        div.id = 'win_line'
+                        div.style.width = "300px"
+                        div.style.height = "10px"
+                        div.style.background = "red"
+                        div.style.position = 'absolute'
+                        div.style.borderRadius = '5px'
+                        if (`${win_line_orientation}`=='vertical') {
+                            div.style.transform = 'rotate(90deg)'
+                        } else if (`${win_line_orientation}`=='diagonal_135') {
+                            div.style.transform = 'rotate(135deg)'
+                        } else if (`${win_line_orientation}`=='diagonal_45') {
+                            div.style.transform = 'rotate(45deg)'
+                        }
+                        if (win_line) {
+                            win_line.appendChild(div)
+                        }
+
+                        if (win_data[0] == 'tie') {
+                            show_outcome.innerHTML = 'It is a tie...'
+                        } else if (win_data[0] == 'O') {
+                            show_outcome.innerHTML = 'O has won!!'
+                        } else if (win_data[0] == 'X') {
+                            show_outcome.innerHTML = 'X has won!!'
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    change_spot_display()
+
+    add_listeners()
+
+
+
+</script>
+{% endblock content %}

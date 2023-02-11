@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <div class="card">
+        <form action="" method="post">
+            {% csrf_token %}
+
+            <label for="">Join room</label>
+            <input list='rooms' type="text" name="join_room" class='form-control mb-3' placeholder='Example_room'>
+            <datalist id="rooms">
+            {% for room in rooms %}
+              <option value="{{room}}">
+            {% endfor %}
+            </datalist>
+
+            <label for="">Create room</label>
+            <input type="text" name="create_room" id="" class='form-control' placeholder='New_room!'>
+
+            <input type="submit" name="" id="submit_button" class='btn btn-primary mt-3' value='Submit'>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
