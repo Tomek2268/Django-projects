@@ -231,7 +231,10 @@
     })
     channel.bind('user_left', function(data) {
         if (data.username == '{{game.host.username}}') {
-            window.location = window.location.href
+            setTimeout(()=>{
+                window.location = window.location.href
+                //window.location = 'http://kometaa.pythonanywhere.com/games/ttt_lobby/'
+            },500)
         } else {
             if (play_again.querySelector('button')) {
                 play_again.querySelector('button').remove()
