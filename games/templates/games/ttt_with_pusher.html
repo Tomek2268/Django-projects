@@ -119,15 +119,15 @@
 
     set_default()
 
-    var user_joined = 'http://127.0.0.1:8000/api/user_joined/'
+    var user_joined = location.protocol + '//' + location.host + '/api/user_joined/'
 
-    var user_left = 'http://127.0.0.1:8000/api/user_left/'
+    var user_left = location.protocol + '//' + location.host + '/api/user_left/'
 
-    var player_move = 'http://127.0.0.1:8000/api/player_move/'
+    var player_move = location.protocol + '//' + location.host + '/api/player_move/'
 
-    var game_continue = 'http://127.0.0.1:8000/api/game_continue/'
+    var game_continue = location.protocol + '//' + location.host + '/api/game_continue/'
 
-    Pusher.logToConsole = true
+    //Pusher.logToConsole = true
 
     var pusher = new Pusher('dc6b22fbfe1791ca3f03', {
         cluster: 'eu'
