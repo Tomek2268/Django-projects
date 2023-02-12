@@ -239,6 +239,7 @@ def chat(request,room):
                 'chat_messages':chat_messages}
     return render(request,'users/chat.html',context)
 
+@login_required(login_url='login')
 def delete_chat(request,pk):
     chat = Chat.objects.get(id=pk)
     if request.method == "POST":
