@@ -1,9 +1,16 @@
 import json
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+import sys
 
 from .pusher import pusher_client
 from ..models import TicTacToeGame
+
+#sys.path.append('../users')
+ 
+# importing
+from users.models import Chat,Message
 
 @api_view(['GET'])
 def get_routes(request):
@@ -81,4 +88,43 @@ def game_continue(request):
         'game_continue': game_continue_value,
         })
 
+    return Response([])
+
+@api_view(['POST'])
+def user_joined_chat(request):
+    room = request.data['room']
+    username = request.data['username']
+
+    pusher_client.trigger(room, 'user_joined_chat', {
+        'username': username,
+        })
+    return Response([])
+
+@api_view(['POST'])
+def send_message(request):
+    room = request.data['room']
+    username = request.data['username']
+    message = request.data['message']
+
+    chat = Chat.objects.get(id=int(room))
+    sender = User.objects.get(username=username)
+    recipient = chat.members.exclude(username=username)[0]
+    new_message = Message.objects.create(sender=sender,recipient=recipient,title=message,chat=chat)
+    new_message.save()
+
+    pusher_client.trigger(room, 'send_message', {
+        'username': username,
+        'message':message
+        })
+
+    return Response([])
+
+@api_view(['POST'])
+def user_left_chat(request):
+    room = request.data['room']
+    username = request.data['username']
+
+    pusher_client.trigger(room, 'user_left_chat', {
+        'username': username,
+        })
     return Response([])

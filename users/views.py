@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 
 from .utils import send_welcome_email,create_profile
 from .forms import RegisterForm,EditUserForm,MessageForm
-from .models import Message
+from .models import Message,Chat
 
 # Create your views here.
 
@@ -195,4 +195,56 @@ def delete_message(request,pk):
         else:
             return redirect('inbox',int(request.GET['page']) - 1)
     context = {'object':message.title}
+    return render(request,'delete_view.html',context)
+
+@login_required(login_url='login')
+def chat_lobby(request):
+    users = User.objects.all().values_list('username',flat=True)
+    chats = Chat.objects.filter(members = request.user)
+
+    if request.POST:
+        if request.POST.get('chat_member') == request.user.username:
+            messages.warning(request,'Can not create chat with yourself')
+        elif request.POST.get('chat_member') in users:
+            chat = Chat.objects.create()
+            chat_member = User.objects.get(username=request.POST.get('chat_member')) 
+            chat.members.add(request.user,chat_member)
+            chat.save()
+            return redirect('chat',chat.id)
+        else:
+            messages.error(request,'User does not exist!')
+
+    context = {'users':users,
+                'chats':chats
+                }
+    return render(request,'users/chat_lobby.html',context)
+
+@login_required(login_url='login')
+def chat(request,room):
+    chat = Chat.objects.get(id=int(room))
+    chat_messages = Message.objects.filter(chat=chat)
+    chat_member = chat.members.exclude(username=request.user.username)[0]
+
+    for message in chat_messages:
+        if message.recipient == request.user:
+            message.is_read = True
+            message.save()
+
+    while len(chat_messages) > 30:
+        chat_messages.earliest('created').delete()
+        chat_messages = Message.objects.filter(chat=chat)
+
+    context = {'chat':chat,
+                'chat_member':chat_member,
+                'chat_messages':chat_messages}
+    return render(request,'users/chat.html',context)
+
+def delete_chat(request,pk):
+    chat = Chat.objects.get(id=pk)
+    if request.method == "POST":
+        chat.delete()
+        return redirect('chat_lobby')
+    context = {
+        'object':chat
+    }
     return render(request,'delete_view.html',context)

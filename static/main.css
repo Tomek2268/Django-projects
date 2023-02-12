@@ -58,6 +58,32 @@ div.add_task a {
     flex-wrap: wrap;
     justify-content: space-between;
 }
+#message {
+    position:fixed;
+    width:20em;
+    height:3em;
+    border-radius:1em;
+    margin-left:50vw;
+    transform:translate(-50%,-30%);
+}
+
+#message>p {
+    position:absolute;
+    margin-top:0.75em;
+    margin-left:1em;
+}
+
+.toastX {
+    color: gray;
+    cursor: pointer;
+    position:absolute;
+    top:1.25em;
+    right:1em;
+}
+
+.toastX:hover {
+    color:black;
+}
 
 @keyframes fade_out {
     from {
@@ -66,6 +92,39 @@ div.add_task a {
     to {
         opacity: 0;
     }
+}
+
+.chat {
+    min-height: 150px;
+    max-height:300px;
+    overflow:auto;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.message_next {
+    height: fit-content;
+    width: inherit;
+}
+
+.message_chat_me {
+    width: fit-content;
+    max-width: 270px;
+    margin-left: auto;
+    right: 0;
+    border-radius: 1em;
+    padding: .2em;
+    margin-bottom: .1em;
+    background-color: lightskyblue;
+}
+
+.message_chat_member {
+    width: fit-content;
+    max-width: 270px;
+    border-radius: 1em;
+    padding: .2em;
+    margin-bottom: .1em;
+    background-color: lightpink;
 }
 
 .task_title {
@@ -140,3 +199,25 @@ div.win_vertical {
     height: 10px;
     border-radius: 5px;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 5px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

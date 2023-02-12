@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center">
+    <div class="card">
+        <h2>Create chat</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            <input list='users' type="text" class='form-control mb-3' placeholder='Select user' name='chat_member'>
+            <datalist id='users'>
+                {% for user in users %}
+                    <option value="{{user}}">
+                {% endfor %}
+            </datalist>
+            <input type="submit" value="Create" class='btn btn-primary'>
+        </form>
+        <hr>
+        <h2>Your chats</h2>
+        {% for chat in chats %}
+        <hr>
+            {% for member in chat.members.all %}
+                {% if member != request.user %}
+                    <a href={% url 'chat' chat.id %}><div style='height:3em;width:inherit;display:grid;grid-template-columns:2fr 4fr 1fr'>
+                        <p style='transform:translateY(.6em)'>{{member}}</p>
+                        <p style='transform:translateY(.6em)'></p>
+                        <p style='position:relative;'><i class="fa-solid fa-2x fa-xmark x" style='position:absolute;top:.25em;right:.5em;' data-chat='{{chat.id}}'></i></p>
+                    </div></a>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+<script>
+    let delete_chat = document.getElementsByClassName('x')
+    for (let i=0;delete_chat.length>i;i++) {
+        delete_chat[i].addEventListener('click',(e)=>{
+            e.preventDefault()
+            window.location = location.protocol + '//' + location.host + '/users/delete_chat/' + delete_chat[i].dataset.chat + '/'
+        })
+    }
+    
+</script>
+{% endblock content %}

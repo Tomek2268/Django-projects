@@ -14,4 +14,8 @@ urlpatterns = [
     path('single_message/<str:pk>/',views.single_message,name='single_message'),
     path('message_form/<str:pk>/<has_recipient>/',views.message_form,name='message_form'),
     path('delete_message/<str:pk>/',views.delete_message,name='delete_message'),
+    #CHAT!
+    path('chat_lobby/',views.chat_lobby,name='chat_lobby'),
+    path('chat/<str:room>/',views.chat,name='chat'),
+    path('delete_chat/<int:pk>/',views.delete_chat,name='delete_chat'),
 ]
