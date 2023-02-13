@@ -20,12 +20,12 @@
                     {% if message.sender == request.user %}
                     <p style='font-size:10px;margin:0;margin-left:auto;'>{{message.created_time}}</p>
                     <div class='message_next'>
-                        <p class='message_chat_me'>{{message.title}}</p>
+                        <p class='message_chat_me'>{{message.title|linebreaksbr}}</p>
                     </div>
                     {% else %}
                     <p style='font-size:10px;margin:0;'>{{message.created_time}}</p>
                     <div class='message_next'>
-                        <p class='message_chat_member'>{{message.title}}</p>
+                        <p class='message_chat_member'>{{message.title|linebreaksbr}}</p>
                     </div>
                     {% endif %}
                     <p style='font-size:10px;margin:0;margin-left:auto;margin-right:auto;' class='created_date'>{{message.created_date}}</p>
@@ -86,7 +86,7 @@
                 body: JSON.stringify({
                     'username': '{{request.user.username}}',
                     'room': '{{chat.id}}',
-                    'message': new_message.value
+                    'message': message_with_br
                 })
             }).then((response) => response.json())
         }
