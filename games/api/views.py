@@ -110,11 +110,13 @@ def send_message(request):
     sender = User.objects.get(username=username)
     recipient = chat.members.exclude(username=username)[0]
     new_message = Message.objects.create(sender=sender,recipient=recipient,title=message,chat=chat)
+    created_time = new_message.created_time
     new_message.save()
 
     pusher_client.trigger(room, 'send_message', {
         'username': username,
-        'message':message
+        'message': message,
+        'created_time': created_time
         })
 
     return Response([])

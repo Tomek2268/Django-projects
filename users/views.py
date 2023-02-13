@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.paginator import Paginator
+from datetime import datetime
 
 from .utils import send_welcome_email,create_profile
 from .forms import RegisterForm,EditUserForm,MessageForm
@@ -223,7 +224,8 @@ def chat_lobby(request):
 def chat(request,room):
     chat = Chat.objects.get(id=int(room))
     chat_messages = Message.objects.filter(chat=chat)
-    chat_member = chat.members.exclude(username=request.user.username)[0]
+
+    chat_member = chat.members.exclude(username=request.user.username)[0].username
 
     for message in chat_messages:
         if message.recipient == request.user:

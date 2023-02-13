@@ -2,21 +2,26 @@
 {% block content %}
 <div class="center">
     <div class="card">
-        <h2 style='position:relative;width:fit-content;'>{{chat_member}}   
-            <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+        <h2 style='position:relative;width:fit-content;padding-right:.5em;'>{{chat_member}}
+            <span class="position-absolute top-50 start-100 translate-middle p-2 bg-secondary border border-light rounded-circle">
           </span></h2>
         <a href="{% url 'chat_lobby' %}"><i class="fa-solid fa-arrow-left fa-xl" style='position:absolute;top:2rem;right:2rem;color:black;'></i></a>
             <div class='chat'>
+                <p style='font-size:10px;margin:0;margin-left:auto;margin-right:auto;' class='created_date'>{{message.created_date}}</p>
                 {% for message in chat_messages %}
+
                     {% if message.sender == request.user %}
+                    <p style='font-size:10px;margin:0;margin-left:auto;'>{{message.created_time}}</p>
                     <div class='message_next'>
                         <p class='message_chat_me'>{{message.title}}</p>
                     </div>
                     {% else %}
+                    <p style='font-size:10px;margin:0;'>{{message.created_time}}</p>
                     <div class='message_next'>
                         <p class='message_chat_member'>{{message.title}}</p>
                     </div>
                     {% endif %}
+                    <p style='font-size:10px;margin:0;margin-left:auto;margin-right:auto;' class='created_date'>{{message.created_date}}</p>
                 {% endfor %}
             </div>
         <form action="">
@@ -81,7 +86,7 @@
     channel.bind('user_joined_chat',function(data) {
         let username = data.username
         if (username != '{{request.user.username}}') {
-            active_mark.classList.remove('bg-danger')
+            active_mark.classList.remove('bg-secondary')
             active_mark.classList.add('bg-success')
         }
     })
@@ -91,14 +96,16 @@
         let message = data.message
         if (username == '{{request.user.username}}') {
             chat.innerHTML = `
+                <p style='font-size:10px;margin:0;margin-left:auto;'>${data.created_time}</p>
                 <div class='message_next'>
                     <p class='message_chat_me'>${message}</p>
                 </div>
             ` + chat.innerHTML
         } else {
-            active_mark.classList.remove('bg-danger')
+            active_mark.classList.remove('bg-secondary')
             active_mark.classList.add('bg-success')
             chat.innerHTML = `
+                <p style='font-size:10px;margin:0;'>${data.created_time}</p>
                 <div class='message_next'>
                     <p class='message_chat_member'>${message}</p>
                 </div>
@@ -109,7 +116,7 @@
 
     channel.bind('user_left_chat',function(data) {
         active_mark.classList.remove('bg-success')
-        active_mark.classList.add('bg-danger')
+        active_mark.classList.add('bg-secondary')
     })
 
     window.addEventListener("beforeunload", (e) => {
@@ -125,5 +132,19 @@
             })
             .then((response) => response.json())
     })
+
+    let created_dates = document.getElementsByClassName('created_date')
+    created_dates = Array.from(created_dates)
+    created_dates.reverse()
+    let previous_date = ''
+    let curr_message = ''
+    for (let i=0;created_dates.length>i;i++) {
+        curr_message = created_dates[i].innerHTML
+        if (curr_message == previous_date) {
+            created_dates[i].innerHTML = ''
+        }
+        previous_date = curr_message
+    }
+
 </script>
 {% endblock content %}
