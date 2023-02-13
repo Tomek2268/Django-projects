@@ -1,5 +1,34 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+    a.chat-link:link {
+        background: lightgrey;
+        text-decoration: none;
+      }
+      
+      /* visited link */
+      a.chat-link:visited {
+        background: lightgrey;
+        text-decoration: none;
+      }
+      
+      /* mouse over link */
+      a.chat-link:hover {
+        background: lightblue;
+      }
+      
+      /* selected link */
+      a.chat-link:active {
+        text-decoration: none;
+      }
+
+    .x:hover {
+        border-radius: 1em;
+        cursor: pointer;
+        background: tomato;
+    }
+</style>
+
 <div class="center">
     <div class="card">
         <h2>Create chat</h2>
@@ -16,14 +45,16 @@
         <hr>
         <h2>Your chats</h2>
         {% for chat in chats %}
-        <hr>
+        <br>
             {% for member in chat.members.all %}
                 {% if member != request.user %}
-                    <a href={% url 'chat' chat.id %}><div style='height:3em;width:inherit;display:grid;grid-template-columns:2fr 4fr 1fr'>
-                        <p style='transform:translateY(.6em)'>{{member}}</p>
-                        <p style='transform:translateY(.6em)'></p>
-                        <p style='position:relative;'><i class="fa-solid fa-2x fa-xmark x" style='position:absolute;top:.25em;right:.5em;' data-chat='{{chat.id}}'></i></p>
-                    </div></a>
+                    <div style='height:3em;display:grid;grid-template-columns:6fr 1fr'>
+                        <a href={% url 'chat' chat.id %} style='height:inherit;display:grid;grid-template-columns:1fr 3fr;border-radius:1em;padding-left:1em;' class='chat-link'>
+                            <p style='transform:translateY(.6em);color:black;'>{{member}}</p>
+                            <p style='transform:translateY(.6em);color:black;'>{{chat.latest_message.title|slice:20}}{% if chat.latest_message.length > 20 %}...{% endif %}</p>
+                        </a>
+                        <p style='position:relative;'><i class="fa-solid fa-2x fa-xmark x" style='position:absolute;top:.25em;right:.5em;color:black;' data-chat='{{chat.id}}'></i></p>
+                    </div>
                 {% endif %}
             {% endfor %}
         {% endfor %}

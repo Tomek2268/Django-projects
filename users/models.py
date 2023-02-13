@@ -15,6 +15,11 @@ class Chat(models.Model):
     members = models.ManyToManyField(User,blank=True)
     chat_name = models.CharField(max_length=30,null=True,blank=True)
 
+    @property
+    def latest_message(self):
+        message = Message.objects.filter(chat=self.id).latest('created')
+        return message
+
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
     recipient = models.ForeignKey(User, on_delete=models.CASCADE,related_name='recipient',null=True,blank=True)
@@ -27,6 +32,9 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['is_read','-created']
+
+    def length(self):
+        return len(self.title)
 
     @property
     def created_time(self):

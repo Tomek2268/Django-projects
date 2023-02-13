@@ -203,6 +203,8 @@ def chat_lobby(request):
     users = User.objects.all().values_list('username',flat=True)
     chats = Chat.objects.filter(members = request.user)
 
+    
+
     if request.POST:
         if request.POST.get('chat_member') == request.user.username:
             messages.warning(request,'Can not create chat with yourself')
