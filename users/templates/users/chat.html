@@ -26,7 +26,7 @@
             </div>
         <form action="">
             <div class="input-group mb-3 mt-3">
-                <input type="text" class="form-control" placeholder="Type message..." id='new_message' maxlength='200'>
+                <textarea type="text" rows='1' class="form-control" placeholder="Type message..." id='new_message' maxlength='200'></textarea>
                 <button class="btn btn-primary" type="submit" id='send'>Send</button>
             </div>
         </form>
@@ -110,8 +110,8 @@
                     <p class='message_chat_member'>${message}</p>
                 </div>
             ` + chat.innerHTML
+            new_message.value = ''
         }
-        new_message.value = ''
     })
 
     channel.bind('user_left_chat',function(data) {
