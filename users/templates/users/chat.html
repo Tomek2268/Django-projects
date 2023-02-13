@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+    #new_message {
+        display: block;
+        overflow: hidden;
+        resize: none;
+    }
+</style>
 <div class="center">
     <div class="card">
         <h2 style='position:relative;width:fit-content;padding-right:.5em;'>{{chat_member}}
@@ -70,17 +77,19 @@
 
     send.addEventListener('click',(e)=>{
         e.preventDefault()
-        fetch(send_message, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                'username': '{{request.user.username}}',
-                'room': '{{chat.id}}',
-                'message': new_message.value
-            })
-        }).then((response) => response.json())
+        if (new_message.value.length != 0) {
+            fetch(send_message, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'username': '{{request.user.username}}',
+                    'room': '{{chat.id}}',
+                    'message': new_message.value
+                })
+            }).then((response) => response.json())
+        }
     })
 
     channel.bind('user_joined_chat',function(data) {
@@ -102,6 +111,8 @@
                 </div>
             ` + chat.innerHTML
             new_message.value = ''
+            new_message.style.height = 'auto';
+            new_message.style.height = this.scrollHeight + 'px';
         } else {
             active_mark.classList.remove('bg-secondary')
             active_mark.classList.add('bg-success')
@@ -146,5 +157,11 @@
         previous_date = curr_message
     }
 
+    new_message.addEventListener('input', autoResize, false);
+          
+    function autoResize() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    }
 </script>
 {% endblock content %}
