@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 import sys
+from datetime import timedelta
  
 # setting path
 sys.path.append('../games')
@@ -38,15 +39,18 @@ class Message(models.Model):
 
     @property
     def created_time(self):
-        return self.created.strftime("%H:%M")
+        x = self.created + timedelta(hours=1)
+        return x.strftime("%H:%M")
 
     @property
     def created_date(self):
-        return self.created.strftime("%d/%m/%y")
+        x = self.created + timedelta(hours=1)
+        return x.strftime("%d/%m/%y")
 
     @property
     def created_datetime(self):
-        return self.created.strftime("%d/%m/%y %H:%M")
+        x = self.created + timedelta(hours=1)
+        return x.strftime("%d/%m/%y %H:%M")
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,blank=True,null=True)
