@@ -78,6 +78,7 @@
     send.addEventListener('click',(e)=>{
         e.preventDefault()
         if (new_message.value.length != 0) {
+            message_with_br = new_message.value.split('\n').join('<br>')
             fetch(send_message, {
                 method: 'POST',
                 headers: {
