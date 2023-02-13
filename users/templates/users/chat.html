@@ -101,6 +101,7 @@
                     <p class='message_chat_me'>${message}</p>
                 </div>
             ` + chat.innerHTML
+            new_message.value = ''
         } else {
             active_mark.classList.remove('bg-secondary')
             active_mark.classList.add('bg-success')
@@ -110,7 +111,6 @@
                     <p class='message_chat_member'>${message}</p>
                 </div>
             ` + chat.innerHTML
-            new_message.value = ''
         }
     })
 
