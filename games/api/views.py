@@ -113,6 +113,10 @@ def send_message(request):
     recipient = chat.members.exclude(username=username)[0]
     new_message = Message.objects.create(sender=sender,recipient=recipient,title=message_to_save,chat=chat)
     created_time = new_message.created_time
+
+    if recipient.profile.is_active_on_chat:
+        new_message.is_read = True
+
     new_message.save()
 
     pusher_client.trigger(room, 'send_message', {
@@ -127,6 +131,10 @@ def send_message(request):
 def user_left_chat(request):
     room = request.data['room']
     username = request.data['username']
+
+    user = User.objects.get(username = username)
+    user.profile.is_active_on_chat = False
+    user.profile.save()
 
     pusher_client.trigger(room, 'user_left_chat', {
         'username': username,

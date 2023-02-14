@@ -9,7 +9,7 @@
 </style>
 <div class="center">
     <div class="card">
-        <h2 style='position:relative;width:fit-content;padding-right:.5em;'>{{chat_member}}
+        <h2 style='position:relative;width:fit-content;padding-right:.5em;'>{{chat_member.username}}
             <span class="position-absolute top-50 start-100 translate-middle p-2 bg-secondary border border-light rounded-circle">
           </span></h2>
         <a href="{% url 'chat_lobby' %}"><i class="fa-solid fa-arrow-left fa-xl" style='position:absolute;top:2rem;right:2rem;color:black;'></i></a>
@@ -18,7 +18,14 @@
                 {% for message in chat_messages %}
 
                     {% if message.sender == request.user %}
-                    <p style='font-size:10px;margin:0;margin-left:auto;'>{{message.created_time}}</p>
+                    <p style='font-size:10px;margin:0;margin-left:auto;'>
+                        {% if message.is_read %}
+                        <i class="fa-solid fa-check" style='margin-right:2em;'></i>
+                        {% else %}
+                        <i class="fa-solid fa-eye-slash unread_mark" style='margin-right:2em;color:red;'></i>
+                        {% endif %}
+                        {{message.created_time}}
+                    </p>
                     <div class='message_next'>
                         <p class='message_chat_me'>{{message.title|linebreaksbr}}</p>
                     </div>
@@ -48,6 +55,8 @@
     
     var channel = pusher.subscribe('{{chat.id}}')
 
+    let unread_marks = document.getElementsByClassName('unread_mark')
+
     let active_mark = document.getElementsByClassName('rounded-circle')[0]
 
     let new_message = document.getElementById('new_message')
@@ -62,6 +71,26 @@
 
     let user_left_chat = location.protocol + '//' + location.host + '/api/user_left_chat/'
 
+    let read_mark = document.createElement('i')
+    read_mark.style.marginRight = '2em'
+    read_mark.style.color = 'black'
+    read_mark.classList.add('fa-solid')
+    read_mark.classList.add('fa-check')
+
+    let unread_mark = document.createElement('i')
+    unread_mark.style.marginRight = '2em'
+    unread_mark.style.color = 'red'
+    read_mark.classList.add('fa-solid')
+    read_mark.classList.add('fa-eye-slash')
+
+    let chat_member_active = false
+
+    if ('{{chat_member.profile.is_active_on_chat}}' == 'True') {
+        active_mark.classList.add('bg-success')
+        active_mark.classList.remove('bg-secondary')
+        chat_member_active = true
+    }
+    
     fetch(user_joined_chat, {
         method: 'POST',
         headers: {
@@ -98,6 +127,12 @@
         if (username != '{{request.user.username}}') {
             active_mark.classList.remove('bg-secondary')
             active_mark.classList.add('bg-success')
+            chat_member_active = true
+        }
+        for (let i=0;unread_marks.length>i;i++) {
+            unread_marks[i].style.color = 'black'
+            unread_marks[i].classList.remove('fa-eye-slash')
+            unread_marks[i].classList.add('fa-check')
         }
     })
 
@@ -105,8 +140,14 @@
         let username = data.username
         let message = data.message
         if (username == '{{request.user.username}}') {
+            let activity_mark = ''
+            if (chat_member_active) {
+                activity_mark = '<i class="fa-solid fa-check" style="margin-right:2em;color:black;"></i>'
+            } else {
+                activity_mark = '<i class="fa-solid fa-eye-slash unread_mark" style="margin-right:2em;color:red;"></i>'
+            }
             chat.innerHTML = `
-                <p style='font-size:10px;margin:0;margin-left:auto;'>${data.created_time}</p>
+                <p style='font-size:10px;margin:0;margin-left:auto;'>${activity_mark}${data.created_time}</p>
                 <div class='message_next'>
                     <p class='message_chat_me'>${message}</p>
                 </div>
@@ -129,6 +170,7 @@
     channel.bind('user_left_chat',function(data) {
         active_mark.classList.remove('bg-success')
         active_mark.classList.add('bg-secondary')
+        chat_member_active = false
     })
 
     window.addEventListener("beforeunload", (e) => {

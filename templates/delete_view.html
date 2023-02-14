@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+
+</style>
 <div class="center"><div class="card">
     <form action="" method="post" name='delete_form'>
         {% csrf_token %}
         <p>Are you sure you want to delete {{object}}?</p>
         <input class="btn btn-outline-danger" type="submit" value="Delete">
     </form>
+    <a href="{% url go_back %}" style='position:absolute;right:1em;' class='back-button'><i class="fa-solid fa-arrow-left fa-2x"></i></a>
 </div></div>
 <script>
     let queryString = window.location.search
     let urlParams = new URLSearchParams(queryString)
     let fast_delete = urlParams.get('fast_delete')
-    console.log(fast_delete)
     if(fast_delete == 'True') {
         document.delete_form.submit()
     }

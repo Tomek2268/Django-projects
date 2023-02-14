@@ -224,10 +224,14 @@ def chat_lobby(request):
 
 @login_required(login_url='login')
 def chat(request,room):
+    user = User.objects.get(username=request.user.username)
+    user.profile.is_active_on_chat = True
+    user.profile.save()
+
     chat = Chat.objects.get(id=int(room))
     chat_messages = Message.objects.filter(chat=chat)
 
-    chat_member = chat.members.exclude(username=request.user.username)[0].username
+    chat_member = chat.members.exclude(username=request.user.username)[0]
 
     for message in chat_messages:
         if message.recipient == request.user:
@@ -245,11 +249,13 @@ def chat(request,room):
 
 @login_required(login_url='login')
 def delete_chat(request,pk):
+    go_back = 'chat_lobby'
     chat = Chat.objects.get(id=pk)
     if request.method == "POST":
         chat.delete()
         return redirect('chat_lobby')
     context = {
-        'object':chat
+        'object':chat,
+        'go_back':go_back
     }
     return render(request,'delete_view.html',context)

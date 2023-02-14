@@ -221,3 +221,12 @@ div.win_vertical {
   ::-webkit-scrollbar-thumb:hover {
     background: #555; 
   }
+
+
+.back-button {
+    color: grey;
+}
+
+.back-button:hover {
+    color: black;
+}

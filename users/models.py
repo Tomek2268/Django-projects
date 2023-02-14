@@ -54,6 +54,7 @@ class Message(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,blank=True,null=True)
+    is_active_on_chat = models.BooleanField(default=False)
 
     @property
     def unread_messages(self):
