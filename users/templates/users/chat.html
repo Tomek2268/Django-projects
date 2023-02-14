@@ -6,6 +6,25 @@
         overflow: hidden;
         resize: none;
     }
+
+    @media screen and (max-width: 600px) {
+        .card {
+            margin:0;
+            width:98vw;
+            height:inherit;
+        }
+        .center {
+            position:sticky;
+            bottom:0;
+            height:90vh;
+            margin:0;
+        }
+
+        .chat {
+            min-height:100px;
+            max-height:5000px;
+        }
+    }
 </style>
 <div class="center">
     <div class="card">
@@ -39,7 +58,7 @@
                 {% endfor %}
             </div>
         <form action="">
-            <div class="input-group mb-3 mt-3">
+            <div class="input-group mt-3">
                 <textarea rows='1' class="form-control" placeholder="Type message..." id='new_message' maxlength='200'></textarea>
                 <button class="btn btn-primary" type="submit" id='send'>Send</button>
             </div>
