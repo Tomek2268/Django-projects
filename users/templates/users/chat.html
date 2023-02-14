@@ -158,10 +158,19 @@
         previous_date = curr_message
     }
 
-    new_message.addEventListener('input',(e)=>{
-
-        new_message.style.height = 'auto';
-        new_message.style.height = new_message.scrollHeight + 'px';
+    new_message.addEventListener('keydown',(e)=>{
+        if (e.key == 'Enter' && !e.shiftKey) {
+            e.preventDefault()
+            send.click()
+        } else if (e.key == 'Enter' && e.shiftKey) {
+            new_message.style.height = 'auto';
+            new_message.style.height = new_message.scrollHeight + 24 + 'px';
+        } else {
+            new_message.style.height = 'auto';
+            new_message.style.height = new_message.scrollHeight + 'px';
+        }
+        console.log(new_message.scrollHeight)
     })
+
 </script>
 {% endblock content %}
