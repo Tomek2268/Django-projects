@@ -33,7 +33,7 @@
             </div>
         <form action="">
             <div class="input-group mb-3 mt-3">
-                <textarea type="text" rows='1' class="form-control" placeholder="Type message..." id='new_message' maxlength='200'></textarea>
+                <textarea rows='1' class="form-control" placeholder="Type message..." id='new_message' maxlength='200'></textarea>
                 <button class="btn btn-primary" type="submit" id='send'>Send</button>
             </div>
         </form>
@@ -158,11 +158,10 @@
         previous_date = curr_message
     }
 
-    new_message.addEventListener('input', autoResize, false);
-          
-    function autoResize() {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
-    }
+    new_message.addEventListener('input',(e)=>{
+
+        new_message.style.height = 'auto';
+        new_message.style.height = new_message.scrollHeight + 'px';
+    })
 </script>
 {% endblock content %}

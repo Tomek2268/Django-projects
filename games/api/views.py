@@ -105,11 +105,13 @@ def send_message(request):
     room = request.data['room']
     username = request.data['username']
     message = request.data['message']
+    message_to_save = message.split('<br>')
+    message_to_save = '\n'.join(message_to_save)
 
     chat = Chat.objects.get(id=int(room))
     sender = User.objects.get(username=username)
     recipient = chat.members.exclude(username=username)[0]
-    new_message = Message.objects.create(sender=sender,recipient=recipient,title=message,chat=chat)
+    new_message = Message.objects.create(sender=sender,recipient=recipient,title=message_to_save,chat=chat)
     created_time = new_message.created_time
     new_message.save()
 
