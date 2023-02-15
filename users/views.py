@@ -203,7 +203,9 @@ def chat_lobby(request):
     users = User.objects.all().values_list('username',flat=True)
     chats = Chat.objects.filter(members = request.user)
 
-    
+    user = request.user
+    user.profile.is_active_on_chat = False
+    user.save()
 
     if request.POST:
         if request.POST.get('chat_member') == request.user.username:
