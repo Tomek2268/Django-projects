@@ -65,13 +65,18 @@
         </form>
     </div>
 </div>
-
+{% load static %}
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 <script>
     var pusher = new Pusher('dc6b22fbfe1791ca3f03', {
         cluster: 'eu'
     })
-    
+    //sounds
+    let sendSound = new Audio("{% static 'sounds/pop.mp3' %}")
+    sendSound.volume = 0.5
+    let receiveSound = new Audio("{% static 'sounds/new-message.mp3' %}")
+    receiveSound.volume = 0.5
+
     var channel = pusher.subscribe('{{chat.id}}')
 
     let unread_marks = document.getElementsByClassName('unread_mark')
@@ -159,6 +164,14 @@
         let username = data.username
         let message = data.message
         if (username == '{{request.user.username}}') {
+
+            sendSound.play(
+                setTimeout(()=>{
+                    sendSound.pause()
+                    sendSound.currentTime = 0
+                },1000)
+            )
+
             let activity_mark = ''
             if (chat_member_active) {
                 activity_mark = '<i class="fa-solid fa-check" style="margin-right:2em;color:black;"></i>'
@@ -175,8 +188,14 @@
             new_message.style.height = 'auto';
             new_message.style.height = this.scrollHeight + 'px';
         } else {
-            active_mark.classList.remove('bg-secondary')
-            active_mark.classList.add('bg-success')
+
+            receiveSound.play(
+                setTimeout(()=>{
+                    receiveSound.pause()
+                    receiveSound.currentTime = 0
+                },1000)
+            )
+
             chat.innerHTML = `
                 <p style='font-size:10px;margin:0;'>${data.created_time}</p>
                 <div class='message_next'>
