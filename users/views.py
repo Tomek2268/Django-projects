@@ -230,7 +230,12 @@ def chat(request,room):
     user.profile.is_active_on_chat = True
     user.profile.save()
 
-    chat = Chat.objects.get(id=int(room))
+    chat = Chat.objects.filter(id=int(room))
+    if chat:
+        chat = chat[0]
+    else:
+        messages.error(request,'Chat has been deleted')
+        return redirect('chat_lobby')
     chat_messages = Message.objects.filter(chat=chat)
 
     chat_member = chat.members.exclude(username=request.user.username)[0]
