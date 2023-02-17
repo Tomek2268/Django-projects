@@ -11,8 +11,9 @@
                 <h4 id='opponen_points'>0</h4>
 
             </div>
-            <div style='position: relative;' id='play_again'>
+            <div style='position: relative;align-items:center;display:flex;flex-direction:column;' id='play_again'>
                 <h2 id='outcome_display' style='color:tomato;'></h2>
+                <div id="hourglass" ></div>
             </div>
             <div style='position: relative;'>
                 {% if request.user.username == game.host.username %}
@@ -66,6 +67,8 @@
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 
 <script>
+    let hourglassInterval = setInterval(()=>{},1000000)
+
     let outcome_display = document.getElementById('outcome_display')
 
     let play_again = document.getElementById('play_again')
@@ -221,12 +224,21 @@
         }
     }
 
+    var clearHourglass = () => {
+        clearInterval(hourglassInterval)
+        // do something else here after firstFunction completes
+        setTimeout(()=>{
+            hourglass.innerHTML = ''
+        },1000)
+    }
+
     change_spot_display()
     set_default()
     channel.bind('game_continue', function(data) {
         if (data.game_continue == 'true') {
             change_spot_display()
             outcome_display.innerHTML = ''
+            clearHourglass()
         }
     })
     
@@ -241,6 +253,7 @@
                 play_again.querySelector('button').remove()
             }
             outcome_display.innerHTML = ''
+            clearHourglass()
             player_mark = 'O'
             opponent.innerHTML = `${data.username} left`
             set_default()
@@ -251,7 +264,7 @@
         if (data.username != '{{request.user.username}}') {
             change_spot_display()
             outcome_display.innerHTML = ''
-
+            clearHourglass()
             opponent.innerHTML = data.username
             your_points.innerHTML = '0'
             opponen_points.innerHTML = '0'
@@ -339,8 +352,33 @@
 
                 e.target.remove()
                 
-                outcome_display.style.color = 'black'
-                outcome_display.innerHTML = 'Waiting for other player <i class="fa-solid fa-hourglass fa-spin"></i>'
+                let hourglass = document.getElementById('hourglass')
+                hourglass.style.transform = 'rotate(0deg)'
+                hourglass.innerHTML = '<i class="fa-solid fa-hourglass-start fa-2x"></i>'
+                setTimeout(()=>{
+                    hourglass.innerHTML = '<i class="fa-solid fa-hourglass-half fa-2x"></i>'
+                    setTimeout(()=>{
+                        hourglass.innerHTML = '<i class="fa-solid fa-hourglass-end fa-2x"></i>'
+                        setTimeout(()=>{
+                            hourglass.style.transform = 'rotate(90deg)'
+                        },500)
+                    },500)
+                },500)
+
+                    hourglassInterval = setInterval(()=>{
+                        hourglass.style.transform = 'rotate(0deg)'
+                        hourglass.innerHTML = '<i class="fa-solid fa-hourglass-start fa-2x"></i>'
+                        setTimeout(()=>{
+                            hourglass.innerHTML = '<i class="fa-solid fa-hourglass-half fa-2x"></i>'
+                            setTimeout(()=>{
+                                hourglass.innerHTML = '<i class="fa-solid fa-hourglass-end fa-2x"></i>'
+                                setTimeout(()=>{
+                                    hourglass.style.transform = 'rotate(90deg)'
+                                },500)
+                            },500)
+                        },500)
+                    },2000)
+                outcome_display.innerHTML = ''
 
                 mark = 'O'
 
