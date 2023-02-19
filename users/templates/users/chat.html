@@ -152,11 +152,12 @@
             active_mark.classList.remove('bg-secondary')
             active_mark.classList.add('bg-success')
             chat_member_active = true
-        }
-        for (let i=0;unread_marks.length>i;i++) {
-            unread_marks[i].style.color = 'black'
-            unread_marks[i].classList.remove('fa-eye-slash')
-            unread_marks[i].classList.add('fa-check')
+        
+            for (let i=0;unread_marks.length>i;i++) {
+                unread_marks[i].style.color = 'black'
+                unread_marks[i].classList.remove('fa-eye-slash')
+                unread_marks[i].classList.add('fa-check')
+            }
         }
     })
 
